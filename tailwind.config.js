@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./app/**/*.{ts,tsx,jsx,js}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        discord: "#5865f2",
+      },
+    },
   },
   plugins: [],
 };

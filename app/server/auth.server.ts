@@ -19,9 +19,15 @@ authenticator.use(
       scope: ["identify", "guilds", "guilds.members.read"],
     },
     async ({ profile, accessToken }) => {
-      const hasRole = await DiscordApi.hasRole(profile, accessToken, "crew");
+      const hasRole = await DiscordApi.hasRole(
+        profile,
+        accessToken,
+        EnvironmentVariables.Discord.RequiredRole
+      );
       if (!hasRole) {
-        throw new AuthorizationError("You do not have the required role.");
+        throw new AuthorizationError(
+          `You do not have access. You need the '${EnvironmentVariables.Discord.RequiredRole}' on the server to gain access.`
+        );
       }
       return {
         ...profile,

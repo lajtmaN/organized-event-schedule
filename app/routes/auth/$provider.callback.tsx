@@ -5,7 +5,7 @@ import { authenticator } from "~/server/auth.server";
 export let loader: LoaderFunction = ({ request, params }) => {
   invariant(params.provider, "Provider is required as part of the url");
   return authenticator.authenticate(params.provider, request, {
-    successRedirect: "/",
+    successRedirect: "/admin",
     failureRedirect: "/login",
   });
 };

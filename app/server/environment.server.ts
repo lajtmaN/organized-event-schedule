@@ -4,5 +4,6 @@ export const EnvironmentVariables = {
     ClientSecret: process.env.DISCORD_CLIENT_SECRET!,
     GuildID: process.env.DISCORD_GUILD_ID!,
     BotToken: process.env.DISCORD_BOT_TOKEN!,
+    RequiredRole: process.env.DISCORD_REQUIRED_ROLE_TO_AUTH!,
   },
 };

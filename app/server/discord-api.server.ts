@@ -25,7 +25,7 @@ export const hasRole = async (
   );
   if (!matchingRole) {
     throw new Error(
-      `The server does not have the "${requiredRole}" role setup.`
+      `The server does not have the "${requiredRole}" role configured.`
     );
   }
 
