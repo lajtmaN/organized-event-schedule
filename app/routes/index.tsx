@@ -1,6 +1,18 @@
 import { Link } from "@remix-run/react";
+import type { LoaderFunction } from "@remix-run/server-runtime";
+import { authenticator } from "~/server/auth.server";
 
 import { useOptionalUser } from "~/utils";
+
+export let loader: LoaderFunction = async ({ request, params }) => {
+  // TODO check if we could login successfully, if not, show why
+  try {
+    const user = await authenticator.isAuthenticated(request);
+    return user;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export default function Index() {
   const user = useOptionalUser();

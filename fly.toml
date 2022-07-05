@@ -1,4 +1,4 @@
-app = "organized-event-schedule-494c"
+app = "nnp-schedule"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = [ ]
