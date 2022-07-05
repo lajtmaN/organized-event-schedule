@@ -1,7 +1,9 @@
 import type { DiscordProfile } from "remix-auth-socials";
 import { EnvironmentVariables } from "./environment.server";
 
-export const getAvatarUrl = (user: DiscordProfile): string => {
+export const getAvatarUrl = (
+  user: Pick<DiscordProfile, "id" | "__json">
+): string => {
   return `https://cdn.discordapp.com/avatars/${user.id}/${user.__json.avatar}.png`;
 };
 
