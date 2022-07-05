@@ -7,32 +7,54 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id    String @id @default(cuid())
-  email String @unique
+model Event {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  startDate DateTime
+  endDate   DateTime
+
+  activities Activity[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  password Password?
-  notes    Note[]
 }
 
-model Password {
-  hash String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @unique
-}
-
-model Note {
-  id    String @id @default(cuid())
-  title String
-  body  String
+model Activity {
+  id                           String                @id @default(uuid())
+  activityType                 String // tournament, mystery, activity
+  name                         String
+  dayOfWeek                    String
+  startTimeMinutesFromMidnight Int
+  durationMinutes              Int?
+  Registration                 ActivityRegistration?
+  Announcement                 ActivityAnnouncement?
+  Countdown                    ActivityCountdown?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Event     Event?   @relation(fields: [eventId], references: [id])
+  eventId   String?
+}
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
+model ActivityRegistration {
+  activityId String   @id
+  Activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  deadlineMinutesBeforeStart Int @default(10)
+}
+
+model ActivityAnnouncement {
+  activityId String   @id
+  Activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  announcedAt   DateTime?
+  customMessage String?
+}
+
+model ActivityCountdown {
+  activityId String   @id
+  Activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  startCountdownMinutesBefore Int @default(10)
 }

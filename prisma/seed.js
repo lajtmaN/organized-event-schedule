@@ -1,42 +1,31 @@
 const { PrismaClient } = require("@prisma/client");
+const slug = require("slug");
 const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "rachel@remix.run";
-
-  // cleanup the existing database
-  await prisma.user.delete({ where: { email } }).catch(() => {
-    // no worries if it doesn't exist yet
+  const event = await prisma.event.create({
+    data: {
+      name: "NNP Sommer",
+      slug: slug("NNP Sommer"),
+      startDate: new Date(2022, 6, 17, 14, 0),
+      endDate: new Date(2022, 6, 19, 12, 0),
+    },
   });
 
-  const hashedPassword = await bcrypt.hash("racheliscool", 10);
-
-  const user = await prisma.user.create({
+  await prisma.activity.create({
     data: {
-      email,
-      password: {
+      eventId: event.id,
+      dayOfWeek: "friday",
+      startTimeMinutesFromMidnight: 16 * 60,
+      activityType: "other",
+      name: "Doors open",
+      Countdown: {
         create: {
-          hash: hashedPassword,
+          startCountdownMinutesBefore: 3 * 60,
         },
       },
-    },
-  });
-
-  await prisma.note.create({
-    data: {
-      title: "My first note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
-
-  await prisma.note.create({
-    data: {
-      title: "My second note",
-      body: "Hello, world!",
-      userId: user.id,
     },
   });
 
