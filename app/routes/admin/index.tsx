@@ -31,7 +31,7 @@ export default function Index() {
         </div>
         <div
           className="cursor-pointer rounded-md border border-transparent p-2 text-lg text-white hover:border-gray-500 hover:bg-gray-600"
-          onClick={() => setShowLogout((cur) => !cur)}
+          onClick={() => setShowLogout(true)}
         >
           <Form
             action="/logout"

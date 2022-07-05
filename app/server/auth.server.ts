@@ -10,12 +10,17 @@ export let authenticator = new Authenticator<User>(sessionStorage, {
   sessionKey: "_session",
 });
 
+const BASE_URL = "http://localhost:3000";
+
 authenticator.use(
   new DiscordStrategy(
     {
       clientID: EnvironmentVariables.Discord.ClientID,
       clientSecret: EnvironmentVariables.Discord.ClientSecret,
-      callbackURL: `http://localhost:3000/auth/${SocialsProvider.DISCORD}/callback`, // TODO - calculate current url instead of localhost:3000
+      callbackURL: new URL(
+        `/auth/${SocialsProvider.DISCORD}/callback`,
+        BASE_URL
+      ).toString(), // TODO - calculate current url instead of localhost:3000
       scope: ["identify", "guilds", "guilds.members.read"],
     },
     async ({ profile, accessToken }) => {

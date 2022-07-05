@@ -10,6 +10,10 @@ type LoaderData = {
   error: { message: string } | null;
 };
 export const loader: LoaderFunction = async ({ request }) => {
+  await authenticator.isAuthenticated(request, {
+    successRedirect: "/admin",
+  });
+
   let session = await getSession(request.headers.get("cookie"));
   let error = session.get(authenticator.sessionErrorKey);
   return json<LoaderData>({ error });
@@ -48,7 +52,11 @@ interface SocialButtonProps {
 }
 
 const SocialButton = ({ provider, label }: SocialButtonProps) => (
-  <Form action={`/auth/${provider}`} method="post">
+  <Form
+    action={`/auth/${provider}`}
+    method="post"
+    name={`${provider}-login-form`}
+  >
     <button
       type="submit"
       className="group relative flex w-72 justify-center rounded-md border border-transparent bg-discord py-3 px-4 text-sm font-medium text-white hover:bg-discord/80 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

@@ -6,4 +6,7 @@ export const EnvironmentVariables = {
     BotToken: process.env.DISCORD_BOT_TOKEN!,
     RequiredRole: process.env.DISCORD_REQUIRED_ROLE_TO_AUTH!,
   },
+  Session: {
+    Secret: process.env.SESSION_SECRET!,
+  },
 };

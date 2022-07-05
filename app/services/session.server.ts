@@ -1,4 +1,5 @@
 import { createCookieSessionStorage } from "@remix-run/node";
+import { EnvironmentVariables } from "~/server/environment.server";
 
 // export the whole sessionStorage object
 export let sessionStorage = createCookieSessionStorage({
@@ -7,7 +8,7 @@ export let sessionStorage = createCookieSessionStorage({
     sameSite: "lax", // this helps with CSRF
     path: "/", // remember to add this so the cookie will work in all routes
     httpOnly: true, // for security reasons, make this cookie http only
-    secrets: ["flashy_endpoint_cement_situation"], // replace this with an actual secret
+    secrets: [EnvironmentVariables.Session.Secret], // this is the secret used to sign the cookie
     secure: process.env.NODE_ENV === "production", // enable this in prod only
   },
 });
