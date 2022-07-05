@@ -1,5 +1,5 @@
 import type { DiscordProfile } from "remix-auth-socials";
-import { EnvironmentVariables } from "./environment.server";
+import { getEnvVariable } from "./environment.server";
 
 export const getAvatarUrl = (
   user: Pick<DiscordProfile, "id" | "__json">
@@ -13,10 +13,10 @@ export const hasRole = async (
   requiredRole: string
 ) => {
   const guildRoles = await fetch(
-    `${BaseURL}/guilds/${EnvironmentVariables.Discord.GuildID}/roles`,
+    `${BaseURL}/guilds/${getEnvVariable("DISCORD_GUILD_ID")}/roles`,
     {
       headers: {
-        Authorization: `Bot ${EnvironmentVariables.Discord.BotToken}`,
+        Authorization: `Bot ${getEnvVariable("DISCORD_BOT_TOKEN")}`,
       },
     }
   );
@@ -32,7 +32,7 @@ export const hasRole = async (
   }
 
   const guildMember = await fetch(
-    `${BaseURL}/users/@me/guilds/${EnvironmentVariables.Discord.GuildID}/member`,
+    `${BaseURL}/users/@me/guilds/${getEnvVariable("DISCORD_GUILD_ID")}/member`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
