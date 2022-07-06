@@ -1,6 +1,7 @@
 import invariant from "tiny-invariant";
 
-type EnvironmentVariable =
+export type EnvironmentVariable =
+  | "DATABASE_URL"
   | "DISCORD_CLIENT_ID"
   | "DISCORD_CLIENT_SECRET"
   | "DISCORD_GUILD_ID"

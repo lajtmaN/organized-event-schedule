@@ -5,7 +5,6 @@ import { sessionStorage } from "~/services/session.server";
 import * as DiscordApi from "./discord-api.server";
 import { getEnvVariable } from "./environment.server";
 
-// Create an instance of the authenticator
 export let authenticator = new Authenticator<User>(sessionStorage, {
   sessionKey: "_session",
 });
