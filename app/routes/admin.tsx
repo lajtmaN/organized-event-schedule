@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user });
 };
 
-export default function Index() {
+export default function AdminNavbar() {
   const { user } = useLoaderData<LoaderData>();
   const [showLogout, setShowLogout] = useState(false);
 
