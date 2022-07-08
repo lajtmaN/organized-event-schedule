@@ -1,0 +1,13 @@
+{
+  "event.model.name": "Navn",
+  "event.model.startDate": "Startdato",
+  "event.model.endDate": "Slutdato",
+  "event.model.status": "Status",
+  "activity.model.name": "Navn",
+  "activity.model.activityType": "Type",
+  "activity.model.dayOfWeek": "Dag",
+  "activity.model.time": "Klokkeslæt",
+  "activity.model.durationMinutes": "Længde",
+
+  "admin.events.table.edit": "Rediger"
+}
