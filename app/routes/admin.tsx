@@ -51,6 +51,7 @@ export default function AdminNavbar() {
           </div>
         </div>
       </nav>
+      Add breadcrumbs here
       <Outlet />
     </>
   );

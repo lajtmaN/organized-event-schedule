@@ -5,6 +5,8 @@ import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Button, Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
+import { PageBody } from "~/components/page-body";
+import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
 
 type LoaderData = {
@@ -24,12 +26,8 @@ export default function Index() {
   const { events } = useLoaderData<LoaderData>();
   return (
     <div>
-      <header className="bh-white shadow">
-        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">Events</h1>
-        </div>
-      </header>
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <PageHeaderTitle>Events</PageHeaderTitle>
+      <PageBody>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Table striped>
             <Table.Head>
@@ -63,7 +61,7 @@ export default function Index() {
             </Table.Body>
           </Table>
         </div>
-      </main>
+      </PageBody>
     </div>
   );
 }
