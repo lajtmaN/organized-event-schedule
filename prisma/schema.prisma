@@ -10,7 +10,7 @@ generator client {
 model Event {
   id        String   @id @default(cuid())
   name      String
-  slug      String
+  slug      String   @unique
   startDate DateTime
   endDate   DateTime
 
