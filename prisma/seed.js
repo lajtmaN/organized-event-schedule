@@ -4,12 +4,13 @@ const slug = require("slug");
 const prisma = new PrismaClient();
 
 async function seed() {
+  await prisma.event.deleteMany() // delete all existing events
   const event = await prisma.event.create({
     data: {
       name: "NNP Sommer",
       slug: slug("NNP Sommer"),
-      startDate: new Date(2022, 6, 17, 14, 0),
-      endDate: new Date(2022, 6, 19, 12, 0),
+      startDate: new Date(2022, 5, 17, 14, 0),
+      endDate: new Date(2022, 5, 19, 12, 0),
     },
   });
 

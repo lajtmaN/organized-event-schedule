@@ -3,6 +3,7 @@ import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import clsx from "clsx";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useInterval } from "react-use";
 import { UserAvatar } from "~/components/user-avatar";
 import type { User } from "~/server/auth.server";
@@ -19,6 +20,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function AdminNavbar() {
+  const { t } = useTranslation();
   const { user } = useLoaderData<LoaderData>();
   const [showLogout, setShowLogout] = useState(false);
 
@@ -27,7 +29,7 @@ export default function AdminNavbar() {
     <>
       <nav className="relative flex items-center justify-between bg-gray-800 py-4 px-6">
         <div>
-          <h1 className="text-xl text-white">Admin</h1>
+          <h1 className="text-xl text-white">{t("admin.nav.title")}</h1>
         </div>
         <div
           className="cursor-pointer rounded-md border border-transparent p-2 text-lg text-white hover:border-gray-500 hover:bg-gray-600"
@@ -38,7 +40,7 @@ export default function AdminNavbar() {
             method="post"
             className={showLogout ? "block" : "hidden"}
           >
-            <button type="submit">Click again to logout</button>
+            <button type="submit">{t("admin.nav.confirmLogout")}</button>
           </Form>
 
           <div
@@ -52,7 +54,9 @@ export default function AdminNavbar() {
         </div>
       </nav>
       Add breadcrumbs here
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 }

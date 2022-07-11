@@ -4,10 +4,13 @@
   "event.model.endDate": "Slutdato",
   "event.model.status": "Status",
   "activity.model.name": "Navn",
-  "activity.model.activityType": "Type",
+  "activity.model.type": "Type",
   "activity.model.dayOfWeek": "Dag",
   "activity.model.time": "Klokkeslæt",
   "activity.model.durationMinutes": "Længde",
 
-  "admin.events.table.edit": "Rediger"
+  "admin.nav.title": "Admin",
+  "admin.nav.confirmLogout": "Tryk igen for at logge ud",
+  "admin.events.table.edit": "Rediger",
+  "admin.event.activities.table.header": "Aktiviteter"
 }
