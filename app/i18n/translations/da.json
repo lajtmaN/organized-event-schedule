@@ -11,6 +11,7 @@
 
   "admin.nav.title": "Admin",
   "admin.nav.confirmLogout": "Tryk igen for at logge ud",
+  "admin.events.title": "Events",
   "admin.events.table.edit": "Rediger",
   "admin.event.activities.table.header": "Aktiviteter"
 }

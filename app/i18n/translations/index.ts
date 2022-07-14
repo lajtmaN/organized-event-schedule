@@ -1,8 +1,14 @@
-import type { Resource } from "i18next";
 import DA from "./da.json";
 
-export const TranslationResources: Resource = {
+export type TranslationKeys = keyof typeof DA;
+
+export const TranslationResources = {
   da: {
     translation: DA,
   },
-};
+} as const;
+
+declare module "react-i18next" {
+  type MyDefaultResources = typeof TranslationResources.da;
+  interface Resources extends MyDefaultResources {}
+}

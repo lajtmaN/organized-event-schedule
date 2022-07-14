@@ -26,7 +26,7 @@ export default function Index() {
   const { events } = useLoaderData<LoaderData>();
   return (
     <div>
-      <PageHeaderTitle>Events</PageHeaderTitle>
+      <PageHeaderTitle>{t("admin.events.title")}</PageHeaderTitle>
       <PageBody>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Table striped>
