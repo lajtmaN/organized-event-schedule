@@ -1,6 +1,6 @@
 import type { Activity, Event } from "@prisma/client";
 
-export const DaysOfWeek = ["friday", "saturday", "sunday"];
+export const DaysOfWeek = ["friday", "saturday", "sunday"] as const;
 export type DayOfWeek = typeof DaysOfWeek[number];
 
 export const calculateActivityStartDateTime = (

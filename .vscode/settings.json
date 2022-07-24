@@ -2,5 +2,6 @@
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
   "i18n-ally.localesPaths": ["app/i18n/translations"],
-  "i18n-ally.displayLanguage": "da"
+  "i18n-ally.displayLanguage": "da",
+  "i18n-ally.keystyle": "flat"
 }

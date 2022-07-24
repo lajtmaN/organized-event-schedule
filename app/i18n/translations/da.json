@@ -5,13 +5,24 @@
   "event.model.status": "Status",
   "activity.model.name": "Navn",
   "activity.model.type": "Type",
+  "activity.model.type.tournament": "Turnering",
+  "activity.model.type.mystery": "Mystery",
+  "activity.model.type.other": "Andet",
   "activity.model.dayOfWeek": "Dag",
+  "activity.model.dayOfWeek.friday": "Fredag",
+  "activity.model.dayOfWeek.saturday": "Lørdag",
+  "activity.model.dayOfWeek.sunday": "Søndag",
   "activity.model.time": "Klokkeslæt",
+  "activity.model.time.helpText": "Hvornår starter aktiviteten?",
   "activity.model.durationMinutes": "Længde",
+  "activity.model.durationMinutes.helpText": "Hvor mange minutter er denne aktivitet?",
+
 
   "admin.nav.title": "Admin",
   "admin.nav.confirmLogout": "Tryk igen for at logge ud",
   "admin.events.title": "Events",
   "admin.events.table.edit": "Rediger",
-  "admin.event.activities.table.header": "Aktiviteter"
+  "admin.event.activities.table.header": "Aktiviteter",
+  "admin.event.activities.create.title": "Opret aktivitet",
+  "admin.event.activities.create.submit": "Opret"
 }
