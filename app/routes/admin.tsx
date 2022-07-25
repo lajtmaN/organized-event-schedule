@@ -10,13 +10,16 @@ import type { User } from "~/server/auth.server";
 import { authenticator } from "~/server/auth.server";
 
 type LoaderData = {
-  user: User;
+  user: Pick<User, "avatarUrl" | "displayName">;
 };
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await authenticator.isAuthenticated(request, {
-    failureRedirect: "/login",
-  });
-  return json<LoaderData>({ user });
+  const { avatarUrl, displayName } = await authenticator.isAuthenticated(
+    request,
+    {
+      failureRedirect: "/login",
+    }
+  );
+  return json<LoaderData>({ user: { avatarUrl, displayName } });
 };
 
 export default function AdminNavbar() {
