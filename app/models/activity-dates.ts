@@ -26,8 +26,27 @@ export const calculateActivityStartDateTime = (
   return activityStartTime;
 };
 
+export const validateStartTime = (
+  event: Pick<Event, "startDate">,
+  activity: Pick<Activity, "dayOfWeek" | "startTimeMinutesFromMidnight">
+) => {
+  const calculatedStartTime = calculateActivityStartDateTime(event, activity);
+  return calculatedStartTime != null;
+};
+
 const addDays = (date: Date, days: number): Date => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
+};
+
+export const parseDayOfWeek = (type: string): DayOfWeek => {
+  switch (type) {
+    case "friday":
+    case "saturday":
+    case "sunday":
+      return type;
+    default:
+      throw new Error(`Unknown day of week: ${type}`);
+  }
 };

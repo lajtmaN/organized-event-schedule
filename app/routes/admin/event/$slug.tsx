@@ -5,6 +5,7 @@ import { Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import invariant from "tiny-invariant";
 import { ErrorAlert } from "~/components/error-alert";
+import { Link } from "~/components/link";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
@@ -59,7 +60,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         id: activity.id,
         name: activity.name,
         type: parseActivityType(activity.activityType),
-        dayOfWeek: activity.dayOfWeek,
+        dayOfWeek: activity.dayOfWeek as DayOfWeek,
         startTime: calculateActivityStartDateTime(
           { startDate: event.startDate },
           activity
@@ -82,9 +83,16 @@ export default function Event() {
     <div>
       <PageHeaderTitle>{event.name}</PageHeaderTitle>
       <PageBody>
-        <h2 className="text-xl font-bold text-gray-900">
-          {t("admin.event.activities.table.header")}
-        </h2>
+        <div className="flex flex-row justify-between">
+          <h2 className="text-xl font-bold text-gray-900">
+            {t("admin.event.activities.table.header")}
+          </h2>
+          <div>
+            <Link to="activities/new">
+              {t("admin.event.activities.table.createActivity")}
+            </Link>
+          </div>
+        </div>
         <Table striped>
           <Table.Head>
             <Table.HeadCell>{t("activity.model.name")}</Table.HeadCell>
@@ -112,7 +120,6 @@ export default function Event() {
         </Table>
         <ul>
           <li>TODO:</li>
-          <li>Opret ny aktivitet</li>
           <li>Links til tidsplan og dashboard</li>
         </ul>
       </PageBody>

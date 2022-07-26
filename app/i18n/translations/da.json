@@ -16,13 +16,16 @@
   "activity.model.time.helpText": "Hvornår starter aktiviteten?",
   "activity.model.durationMinutes": "Længde",
   "activity.model.durationMinutes.helpText": "Hvor mange minutter er denne aktivitet?",
-
+  "activity.model.durationMinutes.unit": "Minutter",
 
   "admin.nav.title": "Admin",
   "admin.nav.confirmLogout": "Tryk igen for at logge ud",
   "admin.events.title": "Events",
   "admin.events.table.edit": "Rediger",
   "admin.event.activities.table.header": "Aktiviteter",
+  "admin.event.activities.table.createActivity": "Opret aktivitet",
   "admin.event.activities.create.title": "Opret aktivitet",
-  "admin.event.activities.create.submit": "Opret"
+  "admin.event.activities.create.submit": "Opret",
+  "admin.event.activities.create.submitting": "Opretter...",
+  "admin.event.activities.create.createMore": "Opret flere?"
 }
