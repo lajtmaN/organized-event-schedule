@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useInterval } from "react-use";
+import { Breadcrumbs } from "~/components/breadcrumbs";
 import { UserAvatar } from "~/components/user-avatar";
 import type { User } from "~/server/auth.server";
 import { authenticator } from "~/server/auth.server";
@@ -56,7 +57,7 @@ export default function AdminNavbar() {
           </div>
         </div>
       </nav>
-      Add breadcrumbs here
+      <Breadcrumbs />
       <main>
         <Outlet />
       </main>
