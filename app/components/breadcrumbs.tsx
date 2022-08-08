@@ -24,7 +24,7 @@ const BreadcrumbRoutes: BreadcrumbRoute[] = [
 
 export const Breadcrumbs = () => {
   const matches = useMatches();
-  console.log(matches);
+
   const breadcrumbs = matches
     .map((match) => {
       const breadcrumb = BreadcrumbRoutes.find((route) =>
