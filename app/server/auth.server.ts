@@ -1,6 +1,6 @@
 import { Authenticator, AuthorizationError } from "remix-auth";
 import type { DiscordProfile } from "remix-auth-socials";
-import { SocialsProvider, DiscordStrategy } from "remix-auth-socials";
+import { DiscordStrategy, SocialsProvider } from "remix-auth-socials";
 import { sessionStorage } from "~/services/session.server";
 import * as DiscordApi from "./discord-api.server";
 import { getEnvVariable } from "./environment.server";
@@ -29,7 +29,7 @@ authenticator.use(
       );
       if (!hasRole) {
         throw new AuthorizationError(
-          `You do not have access. You need the '${requiredRole}' on the server to gain access.`
+          `You do not have access. You need the '${requiredRole}' role on the server to gain access.`
         );
       }
       return {

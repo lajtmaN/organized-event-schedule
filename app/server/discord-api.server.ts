@@ -45,7 +45,7 @@ export const hasRole = async (
   return memberData.roles.includes(matchingRole.id);
 };
 
-const BaseURL = "https://discord.com/api/v10";
+const BaseURL = "https://discord.com/api";
 
 interface GuildMemberResponse {
   roles: string[];

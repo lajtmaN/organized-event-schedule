@@ -18,6 +18,8 @@ module.exports = {
   },
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
-    "no-console": "warn"
   },
+  overrides: [
+    { files: "*.tsx", rules: { "no-console": "warn" } },
+  ]
 };

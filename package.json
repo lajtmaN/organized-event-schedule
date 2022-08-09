@@ -70,6 +70,7 @@
     "c8": "^7.11.3",
     "cross-env": "^7.0.3",
     "cypress": "^10.0.3",
+    "esbuild-register": "^3.3.3",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "happy-dom": "^5.2.0",
