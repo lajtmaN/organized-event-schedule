@@ -3,9 +3,10 @@ import type { DayOfWeek } from "~/models/activity-dates";
 import { validateStartTime } from "~/models/activity-dates";
 import type { ActivityType } from "~/models/activity-type";
 
-export const createActivity = async (
+export const upsertActivity = async (
   eventId: string,
   activity: {
+    id?: string;
     type: ActivityType;
     name: string;
     dayOfWeek: DayOfWeek;
@@ -18,14 +19,19 @@ export const createActivity = async (
     select: { startDate: true },
   });
   validateStartTime({ startDate: event.startDate }, activity);
-  return prisma.activity.create({
-    data: {
-      eventId: eventId,
-      activityType: activity.type,
-      name: activity.name,
-      dayOfWeek: activity.dayOfWeek,
-      startTimeMinutesFromMidnight: activity.startTimeMinutesFromMidnight,
-      durationMinutes: activity.durationMinutes,
-    },
+
+  const fields = {
+    eventId: eventId,
+    activityType: activity.type,
+    name: activity.name,
+    dayOfWeek: activity.dayOfWeek,
+    startTimeMinutesFromMidnight: activity.startTimeMinutesFromMidnight,
+    durationMinutes: activity.durationMinutes,
+  };
+
+  return prisma.activity.upsert({
+    where: { id: activity.id ?? "CREATE_NEW" },
+    update: fields,
+    create: fields,
   });
 };

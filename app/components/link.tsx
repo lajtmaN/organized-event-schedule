@@ -6,8 +6,17 @@ export const Link = (props: RemixLinkProps) => (
   <RemixLink
     {...props}
     className={clsx(
-      props.className,
-      "flex items-center justify-center rounded-md border border-transparent bg-indigo-100 px-6 py-2 text-base font-medium text-indigo-700 shadow-sm hover:bg-indigo-300"
+      "flex items-center justify-center rounded-md border border-transparent bg-indigo-100 px-6 py-2 text-base font-medium text-indigo-700 shadow-sm hover:bg-indigo-300",
+      props.className
+    )}
+  />
+);
+export const MinimalisticLink = (props: RemixLinkProps) => (
+  <RemixLink
+    {...props}
+    className={clsx(
+      "text-base text-indigo-500 hover:text-indigo-700 hover:underline",
+      props.className
     )}
   />
 );

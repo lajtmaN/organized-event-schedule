@@ -22,10 +22,23 @@
   "admin.nav.confirmLogout": "Tryk igen for at logge ud",
   "admin.events.title": "Events",
   "admin.events.table.edit": "Rediger",
+
   "admin.event.activities.table.header": "Aktiviteter",
   "admin.event.activities.table.createActivity": "Opret aktivitet",
+  "admin.event.activities.table.actions": "Ret",
+  "admin.event.activities.table.updateActivity": "Opdatér",
+  "admin.event.activities.table.duplicateActivity": "Dupliker",
+
   "admin.event.activities.create.title": "Opret aktivitet",
   "admin.event.activities.create.submit": "Opret",
   "admin.event.activities.create.submitting": "Opretter...",
-  "admin.event.activities.create.createMore": "Opret flere?"
+  "admin.event.activities.create.createMore": "Opret flere?",
+
+  "admin.event.activities.update.title": "Opdatér aktivitet",
+  "admin.event.activities.update.submit": "Opdatér",
+  "admin.event.activities.update.submitting": "Opdatérer...",
+
+  "admin.event.activities.duplicate.title": "Dupliker aktivitet",
+  "admin.event.activities.duplicate.submit": "Dupliker",
+  "admin.event.activities.duplicate.submitting": "Duplikerer..."
 }

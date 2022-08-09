@@ -1,0 +1,154 @@
+import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime";
+import { json, redirect } from "@remix-run/server-runtime";
+import { Button } from "flowbite-react";
+import { useTranslation } from "react-i18next";
+import invariant from "tiny-invariant";
+import {
+  CreateUpdateActivityFields,
+  CreateUpdateForm,
+  extractActivityFromFormData,
+} from "~/components/activities/CreateUpdateForm";
+import { FormErrorMessage } from "~/components/form-error-message";
+import { PageBody } from "~/components/page-body";
+import { PageHeaderTitle } from "~/components/page-header";
+import { prisma } from "~/db.server";
+import { activityStartTime, parseDayOfWeek } from "~/models/activity-dates";
+import { parseActivityType } from "~/models/activity-type";
+import { notFound } from "~/server/utils/notFound";
+import { upsertActivity } from "~/services/activity.server";
+import { eventExistsOrThrow, findEventOrThrow } from "~/services/event.server";
+
+export async function loader({ request, params }: LoaderArgs) {
+  await eventExistsOrThrow(params.slug);
+  invariant(params.activityId, "activityId is required");
+
+  const activity = await prisma.activity.findUnique({
+    where: { id: params.activityId },
+    select: {
+      name: true,
+      activityType: true,
+      dayOfWeek: true,
+      startTimeMinutesFromMidnight: true,
+      durationMinutes: true,
+      updatedAt: true,
+    },
+  });
+  if (!activity) {
+    return notFound("Activity not found");
+  }
+
+  const url = new URL(request.url);
+  const requestedAction =
+    url.searchParams.get("action") === "duplicate"
+      ? ("duplicate" as const)
+      : ("update" as const);
+
+  return json({
+    defaultData: {
+      name: activity.name,
+      type: parseActivityType(activity.activityType),
+      dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
+      startTime: activityStartTime(activity.startTimeMinutesFromMidnight),
+      durationMinutes: activity.durationMinutes,
+    },
+    lastUpdatedAt: activity.updatedAt,
+    requestedAction,
+  });
+}
+export async function action({ request, params }: ActionArgs) {
+  const event = await findEventOrThrow(params.slug);
+  invariant(params.activityId, "activityId is required");
+
+  const formData = await request.formData();
+  const requestedAction = formData.get("_action");
+  invariant(
+    requestedAction === "duplicate" || requestedAction === "update",
+    "Requested action was not understood"
+  );
+
+  const { errors, activity } = extractActivityFromFormData(formData);
+  if (errors.length > 0) {
+    return json({
+      errors,
+      result: null,
+    });
+  }
+  try {
+    await upsertActivity(event.id, {
+      id: requestedAction === "update" ? params.activityId : undefined,
+      name: activity.name,
+      type: activity.type,
+      dayOfWeek: activity.dayOfWeek,
+      startTimeMinutesFromMidnight: activity.minutesFromMidnight,
+      durationMinutes: activity.duration,
+    });
+    return redirect(`/admin/event/${params.slug}`);
+  } catch (e) {
+    return json({
+      errors: [
+        {
+          field: "activity",
+          error: (e as Error)?.message ?? "Something went wrong...",
+        },
+      ],
+      result: null,
+    });
+  }
+}
+
+export default function EditActivity() {
+  const { t } = useTranslation();
+  const transition = useTransition();
+  const { defaultData, lastUpdatedAt, requestedAction } =
+    useLoaderData<typeof loader>();
+
+  const actionData = useActionData<typeof action>();
+  const getErrorForField = (field: string) =>
+    actionData?.errors?.find((err) => err.field === field)?.error;
+  return (
+    <div>
+      <PageHeaderTitle>
+        {t(`admin.event.activities.${requestedAction}.title`)}
+      </PageHeaderTitle>
+      <PageBody>
+        <CreateUpdateForm>
+          <CreateUpdateActivityFields.Name
+            error={getErrorForField("name")}
+            defaultValue={defaultData.name}
+          />
+          <CreateUpdateActivityFields.Type
+            error={getErrorForField("type")}
+            defaultValue={defaultData.type}
+          />
+          <CreateUpdateActivityFields.DayOfWeek
+            error={getErrorForField("dayOfWeek")}
+            defaultValue={defaultData.dayOfWeek}
+          />
+          <CreateUpdateActivityFields.StartTime
+            error={getErrorForField("startTime")}
+            defaultValue={defaultData.startTime}
+          />
+          <CreateUpdateActivityFields.DurationMinutes
+            error={getErrorForField("durationMinutes")}
+            defaultValue={defaultData.durationMinutes ?? undefined}
+          />
+          <Button type="submit" value={requestedAction} name="_action">
+            {transition?.state === "submitting"
+              ? t(`admin.event.activities.${requestedAction}.submitting`)
+              : t(`admin.event.activities.${requestedAction}.submit`)}
+          </Button>
+          {requestedAction === "update" && lastUpdatedAt ? (
+            <em>
+              Last updated at:{" "}
+              <time dateTime={lastUpdatedAt}>
+                {new Date(lastUpdatedAt).toLocaleString()}
+              </time>
+            </em>
+          ) : null}
+          <FormErrorMessage>{getErrorForField("activity")}</FormErrorMessage>
+        </CreateUpdateForm>
+      </PageBody>
+    </div>
+  );
+}

@@ -1,70 +1,61 @@
-import { useLoaderData } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/server-runtime";
+import { useCatch, useLoaderData } from "@remix-run/react";
+import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import invariant from "tiny-invariant";
 import { ErrorAlert } from "~/components/error-alert";
-import { Link } from "~/components/link";
+import { Link, MinimalisticLink } from "~/components/link";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
-import type { DayOfWeek } from "~/models/activity-dates";
-import { calculateActivityStartDateTime } from "~/models/activity-dates";
-import type { ActivityType } from "~/models/activity-type";
+import { activityStartTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
+import { notFound } from "~/server/utils/notFound";
 
-type Activity = {
-  id: string;
-  type: ActivityType;
-  name: string;
-  dayOfWeek: DayOfWeek;
-  startTime: Date;
-  registration: boolean;
-  announcement: boolean;
-  countdown: boolean;
-};
-type LoaderData = {
-  event?: {
-    id: string;
-    name: string;
-    activities: Activity[];
-  };
-  error?: {
-    message: string;
-  };
-};
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const slug = params.slug;
-  invariant(slug, "slug is required");
-  const event = await prisma.event.findUnique({ where: { slug } });
-  if (!event) {
-    return json<LoaderData>(
-      { error: { message: "Event not found" } },
-      { status: 404 }
-    );
-  }
-  const activities = await prisma.activity.findMany({
-    where: { eventId: event.id },
-    include: {
-      Announcement: true,
-      Countdown: true,
-      Registration: true,
+export const loader = async ({ params }: LoaderArgs) => {
+  invariant(params.slug, "slug is required");
+  const event = await prisma.event.findUnique({
+    where: { slug: params.slug },
+    select: {
+      id: true,
+      name: true,
+      activities: {
+        select: {
+          id: true,
+          name: true,
+          activityType: true,
+          startTimeMinutesFromMidnight: true,
+          dayOfWeek: true,
+          Announcement: true,
+          Countdown: true,
+          Registration: true,
+        },
+        orderBy: [
+          {
+            dayOfWeek: "asc",
+          },
+          {
+            startTimeMinutesFromMidnight: "asc",
+          },
+        ],
+      },
     },
   });
-  return json<LoaderData>({
+  if (!event) {
+    return notFound("Event not found");
+  }
+
+  return json({
     event: {
       id: event.id,
       name: event.name,
-      activities: activities.map((activity) => ({
+      activities: event.activities.map((activity) => ({
         id: activity.id,
         name: activity.name,
         type: parseActivityType(activity.activityType),
-        dayOfWeek: activity.dayOfWeek as DayOfWeek,
-        startTime: calculateActivityStartDateTime(
-          { startDate: event.startDate },
-          activity
-        ),
+        dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
+        startTime: activityStartTime(activity.startTimeMinutesFromMidnight),
         announcement: Boolean(activity.Announcement),
         countdown: Boolean(activity.Countdown),
         registration: Boolean(activity.Registration),
@@ -75,15 +66,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export default function Event() {
   const { t } = useTranslation();
-  const { event, error } = useLoaderData<LoaderData>();
-  if (error || !event) {
-    return <ErrorAlert>{error?.message}</ErrorAlert>;
-  }
+  const { event } = useLoaderData<typeof loader>();
+
   return (
     <div>
       <PageHeaderTitle>{event.name}</PageHeaderTitle>
       <PageBody>
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row items-center justify-between pb-2">
           <h2 className="text-xl font-bold text-gray-900">
             {t("admin.event.activities.table.header")}
           </h2>
@@ -99,20 +88,30 @@ export default function Event() {
             <Table.HeadCell>{t("activity.model.type")}</Table.HeadCell>
             <Table.HeadCell>{t("activity.model.dayOfWeek")}</Table.HeadCell>
             <Table.HeadCell>{t("activity.model.time")}</Table.HeadCell>
+            <Table.HeadCell>
+              {t("admin.event.activities.table.actions")}
+            </Table.HeadCell>
           </Table.Head>
           <Table.Body>
             {event.activities.map((activity) => (
               <Table.Row key={activity.id}>
                 <Table.Cell>{activity.name}</Table.Cell>
-                <Table.Cell>{activity.type}</Table.Cell>
-                <Table.Cell className="capitalize">
-                  {activity.dayOfWeek}
-                </Table.Cell>
                 <Table.Cell>
-                  {new Date(activity.startTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {t(`activity.model.type.${activity.type}`)}
+                </Table.Cell>
+                <Table.Cell className="capitalize">
+                  {t(`activity.model.dayOfWeek.${activity.dayOfWeek}`)}
+                </Table.Cell>
+                <Table.Cell>{activity.startTime}</Table.Cell>
+                <Table.Cell className="space-x-2">
+                  <MinimalisticLink to={`activities/${activity.id}`}>
+                    {t("admin.event.activities.table.updateActivity")}
+                  </MinimalisticLink>
+                  <MinimalisticLink
+                    to={`activities/${activity.id}?action=duplicate`}
+                  >
+                    {t("admin.event.activities.table.duplicateActivity")}
+                  </MinimalisticLink>
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -125,4 +124,20 @@ export default function Event() {
       </PageBody>
     </div>
   );
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.error(error);
+
+  return <ErrorAlert>An unexpected error occurred: {error.message}</ErrorAlert>;
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  if (caught.status === 404) {
+    return <ErrorAlert>{caught.data}</ErrorAlert>;
+  }
+
+  throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }

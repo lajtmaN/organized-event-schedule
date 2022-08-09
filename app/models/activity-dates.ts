@@ -50,3 +50,28 @@ export const parseDayOfWeek = (type: string): DayOfWeek => {
       throw new Error(`Unknown day of week: ${type}`);
   }
 };
+
+/**
+ * Converts the start time from minutes from midnight to hours and minutes.
+ * @param param0 Activity
+ * @returns timestamp formatted as HH:mm (24 hour clock)
+ */
+export const activityStartTime = (startTimeMinutesFromMidnight: number) => {
+  const hours = Math.floor(startTimeMinutesFromMidnight / 60)
+    .toString()
+    .padStart(2, "0");
+  const minutes = (startTimeMinutesFromMidnight % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${hours}:${minutes}`;
+};
+
+export const getMinutesFromMidnight = (
+  startTimeRaw: FormDataEntryValue | null
+) => {
+  if (!startTimeRaw) {
+    return null;
+  }
+  const [hours, minutes] = startTimeRaw.toString().split(":");
+  return parseInt(hours) * 60 + parseInt(minutes);
+};

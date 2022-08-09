@@ -1,15 +1,21 @@
 import { prisma } from "~/db.server";
+import { notFound } from "~/server/utils/notFound";
 
 export const eventExistsOrThrow = async (eventSlug: string | undefined) => {
-  findEventOrThrow(eventSlug);
+  await findEventOrThrow(eventSlug);
 };
 
 export const findEventOrThrow = async (eventSlug: string | undefined) => {
   if (!eventSlug) {
-    throw new Error("Event slug is required");
+    return notFound(`Event slug is required`);
   }
-  return prisma.event.findUniqueOrThrow({
+
+  const event = await prisma.event.findUnique({
     where: { slug: eventSlug },
     select: { id: true },
   });
+  if (!event) {
+    return notFound(`Event with slug ${eventSlug} not found`);
+  }
+  return event;
 };

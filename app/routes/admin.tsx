@@ -1,4 +1,4 @@
-import { Form, Outlet, useLoaderData } from "@remix-run/react";
+import { Form, Outlet, useCatch, useLoaderData } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import clsx from "clsx";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useInterval } from "react-use";
 import { Breadcrumbs } from "~/components/breadcrumbs";
+import { ErrorAlert } from "~/components/error-alert";
 import { UserAvatar } from "~/components/user-avatar";
 import type { User } from "~/server/auth.server";
 import { authenticator } from "~/server/auth.server";
@@ -63,4 +64,20 @@ export default function AdminNavbar() {
       </main>
     </>
   );
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.error(error);
+
+  return <ErrorAlert>An unexpected error occurred: {error.message}</ErrorAlert>;
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  if (caught.status === 404) {
+    return <ErrorAlert>{caught.data}</ErrorAlert>;
+  }
+
+  throw new Error(`Unexpected caught response with status: ${caught.status}`);
 }
