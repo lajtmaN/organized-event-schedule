@@ -5,13 +5,18 @@ import { Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import invariant from "tiny-invariant";
 import { ErrorAlert } from "~/components/error-alert";
-import { Link, MinimalisticLink } from "~/components/link";
+import {
+  Link,
+  MinimalisticLink,
+  MinimalisticLinkStyling,
+} from "~/components/link";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
 import { activityStartTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
 import { notFound } from "~/server/utils/notFound";
+import { DeleteActivityButton } from "./$slug.activities/$activityId.delete";
 
 export const loader = async ({ params }: LoaderArgs) => {
   invariant(params.slug, "slug is required");
@@ -112,6 +117,12 @@ export default function Event() {
                   >
                     {t("admin.event.activities.table.duplicateActivity")}
                   </MinimalisticLink>
+                  <DeleteActivityButton
+                    className={MinimalisticLinkStyling}
+                    activityId={activity.id}
+                  >
+                    {t("admin.event.activities.delete")}
+                  </DeleteActivityButton>
                 </Table.Cell>
               </Table.Row>
             ))}

@@ -40,5 +40,8 @@
 
   "admin.event.activities.duplicate.title": "Dupliker aktivitet",
   "admin.event.activities.duplicate.submit": "Dupliker",
-  "admin.event.activities.duplicate.submitting": "Duplikerer..."
+  "admin.event.activities.duplicate.submitting": "Duplikerer...",
+
+  "admin.event.activities.delete": "Slet",
+  "admin.event.activities.delete.confirm": "Er du sikker på du vil slette denne aktivitet?"
 }

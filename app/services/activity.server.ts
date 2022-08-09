@@ -35,3 +35,9 @@ export const upsertActivity = async (
     create: fields,
   });
 };
+
+export const deleteActivity = async (activityId: string) => {
+  return prisma.activity.delete({
+    where: { id: activityId },
+  });
+};

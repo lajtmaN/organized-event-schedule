@@ -14,9 +14,9 @@ export const Link = (props: RemixLinkProps) => (
 export const MinimalisticLink = (props: RemixLinkProps) => (
   <RemixLink
     {...props}
-    className={clsx(
-      "text-base text-indigo-500 hover:text-indigo-700 hover:underline",
-      props.className
-    )}
+    className={clsx(MinimalisticLinkStyling, props.className)}
   />
 );
+
+export const MinimalisticLinkStyling =
+  "text-base text-indigo-500 hover:text-indigo-700 hover:underline" as const;
