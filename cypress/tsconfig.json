@@ -7,7 +7,8 @@
     "e2e/**/*",
     "support/**/*",
     "../node_modules/cypress",
-    "../node_modules/@testing-library/cypress"
+    "../node_modules/@testing-library/cypress",
+    "cypress.d.ts"
   ],
   "compilerOptions": {
     "baseUrl": ".",
@@ -20,7 +21,7 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "typeRoots": ["../types", "../node_modules/@types"],
+    "typeRoots": ["../types", "../node_modules/@types", "cypress.d.ts"],
 
     "paths": {
       "~/*": ["../app/*"]
