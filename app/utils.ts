@@ -41,3 +41,9 @@ export function useMatchesData(
   );
   return route?.data;
 }
+
+/**
+ * Alternative to Object.keys that returns typed keys instead of string[]
+ */
+export const keys: <K extends string>(r: Record<K, any>) => K[] =
+  Object.keys.bind(Object);

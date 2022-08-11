@@ -13,7 +13,7 @@ import {
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
-import { activityStartTime, parseDayOfWeek } from "~/models/activity-dates";
+import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
 import { notFound } from "~/server/utils/notFound";
 import { DeleteActivityButton } from "./$slug.activities/$activityId.delete";
@@ -54,13 +54,14 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({
     event: {
       id: event.id,
+      slug: params.slug,
       name: event.name,
       activities: event.activities.map((activity) => ({
         id: activity.id,
         name: activity.name,
         type: parseActivityType(activity.activityType),
         dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
-        startTime: activityStartTime(activity.startTimeMinutesFromMidnight),
+        startTime: activityTime(activity.startTimeMinutesFromMidnight),
         announcement: Boolean(activity.Announcement),
         countdown: Boolean(activity.Countdown),
         registration: Boolean(activity.Registration),
@@ -128,9 +129,14 @@ export default function Event() {
             ))}
           </Table.Body>
         </Table>
+        <h2 className="text-xl font-bold text-gray-900">Shortcuts</h2>
         <ul>
-          <li>TODO:</li>
-          <li>Links til tidsplan og dashboard</li>
+          <li>
+            <MinimalisticLink to={`/schedule/${event.slug}`}>
+              Tidsplan
+            </MinimalisticLink>
+          </li>
+          <li>Link til dashboard</li>
         </ul>
       </PageBody>
     </div>

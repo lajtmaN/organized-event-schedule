@@ -43,5 +43,8 @@
   "admin.event.activities.duplicate.submitting": "Duplikerer...",
 
   "admin.event.activities.delete": "Slet",
-  "admin.event.activities.delete.confirm": "Er du sikker på du vil slette denne aktivitet?"
+  "admin.event.activities.delete.confirm": "Er du sikker på du vil slette denne aktivitet?",
+
+  "schedule.title": "Tidsplan for {{eventName}}",
+  "schedule.activity.registration.deadlineText": "Tilmelding lukker ({{activityName}})"
 }

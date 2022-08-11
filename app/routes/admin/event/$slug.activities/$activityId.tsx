@@ -13,7 +13,7 @@ import { FormErrorMessage } from "~/components/form-error-message";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
-import { activityStartTime, parseDayOfWeek } from "~/models/activity-dates";
+import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
 import { notFound } from "~/server/utils/notFound";
 import { upsertActivity } from "~/services/activity.server";
@@ -49,7 +49,7 @@ export async function loader({ request, params }: LoaderArgs) {
       name: activity.name,
       type: parseActivityType(activity.activityType),
       dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
-      startTime: activityStartTime(activity.startTimeMinutesFromMidnight),
+      startTime: activityTime(activity.startTimeMinutesFromMidnight),
       durationMinutes: activity.durationMinutes,
     },
     lastUpdatedAt: activity.updatedAt,
