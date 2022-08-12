@@ -1,29 +1,43 @@
 import { ChevronRightIcon } from "@heroicons/react/outline";
-import type { Event } from "@prisma/client";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Button, Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
+import { StatusBadge } from "~/components/Events/status-badge";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
+import { calculateEventStatus } from "~/services/event.server";
 
-type LoaderData = {
-  events: Event[];
-};
-export const loader: LoaderFunction = async () => {
+export const loader = async () => {
   const events = await prisma.event.findMany({
     orderBy: {
       startDate: "desc",
     },
+    select: {
+      id: true,
+      name: true,
+      startDate: true,
+      endDate: true,
+      slug: true,
+      published: true,
+    },
   });
-  return json<LoaderData>({ events });
+
+  const mapped = events.map(({ published, ...event }) => ({
+    ...event,
+    status: calculateEventStatus({
+      published,
+      startDate: event.startDate,
+      endDate: event.endDate,
+    }),
+  }));
+  return json({ events: mapped });
 };
 
 export default function Index() {
   const { t } = useTranslation();
-  const { events } = useLoaderData<LoaderData>();
+  const { events } = useLoaderData<typeof loader>();
   return (
     <div>
       <PageHeaderTitle>{t("admin.events.title")}</PageHeaderTitle>
@@ -47,7 +61,9 @@ export default function Index() {
                   <Table.Cell>
                     {new Date(event.endDate).toLocaleString()}
                   </Table.Cell>
-                  <Table.Cell>{/* Upcomming/Current/Past */}</Table.Cell>
+                  <Table.Cell>
+                    <StatusBadge status={event.status} />
+                  </Table.Cell>
                   <Table.Cell>
                     <Link to={`/admin/event/${event.slug}`} prefetch="intent">
                       <Button>

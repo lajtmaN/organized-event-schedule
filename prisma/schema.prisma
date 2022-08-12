@@ -14,7 +14,7 @@ model Event {
   startDate DateTime
   endDate   DateTime
 
-  // published Boolean @default(false)
+  published Boolean @default(false)
 
   activities Activity[]
 

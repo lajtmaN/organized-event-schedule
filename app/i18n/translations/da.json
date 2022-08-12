@@ -3,6 +3,11 @@
   "event.model.startDate": "Startdato",
   "event.model.endDate": "Slutdato",
   "event.model.status": "Status",
+  "event.model.status.draft": "Kladde",
+  "event.model.status.live": "Live",
+  "event.model.status.past": "Tidligere",
+  "event.model.status.future": "Fremtidigt",
+
   "activity.model.name": "Navn",
   "activity.model.type": "Type",
   "activity.model.type.tournament": "Turnering",
