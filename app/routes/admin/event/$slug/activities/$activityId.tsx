@@ -8,7 +8,7 @@ import {
   CreateUpdateActivityFields,
   CreateUpdateForm,
   extractActivityFromFormData,
-} from "~/components/activities/CreateUpdateForm";
+} from "~/components/activities/create-update-form";
 import { FormErrorMessage } from "~/components/form-error-message";
 import { prisma } from "~/db.server";
 import { activityTime, parseDayOfWeek } from "~/models/activity-dates";

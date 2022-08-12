@@ -7,7 +7,7 @@ import {
   CreateUpdateActivityFields,
   CreateUpdateForm,
   extractActivityFromFormData,
-} from "~/components/activities/CreateUpdateForm";
+} from "~/components/activities/create-update-form";
 import { FormErrorMessage } from "~/components/form-error-message";
 import { upsertActivity } from "~/services/activity.server";
 import { eventExistsOrThrow, findEventOrThrow } from "~/services/event.server";

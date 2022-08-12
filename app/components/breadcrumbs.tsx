@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/outline";
 import type { RouteMatch } from "@remix-run/react";
-import { NavLink } from "@remix-run/react";
-import { useMatches } from "@remix-run/react";
+import { NavLink, useMatches } from "@remix-run/react";
 
 interface BreadcrumbRoute {
   pathId: string;
