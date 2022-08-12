@@ -1,4 +1,4 @@
-import { useCatch, useLoaderData } from "@remix-run/react";
+import { useCatch, useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Table } from "flowbite-react";
@@ -10,8 +10,6 @@ import {
   MinimalisticLink,
   MinimalisticLinkStyling,
 } from "~/components/link";
-import { PageBody } from "~/components/page-body";
-import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
 import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
@@ -23,8 +21,6 @@ export const loader = async ({ params }: LoaderArgs) => {
   const event = await prisma.event.findUnique({
     where: { slug: params.slug },
     select: {
-      id: true,
-      name: true,
       activities: {
         select: {
           id: true,
@@ -52,94 +48,85 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
 
   return json({
-    event: {
-      id: event.id,
-      slug: params.slug,
-      name: event.name,
-      activities: event.activities.map((activity) => ({
-        id: activity.id,
-        name: activity.name,
-        type: parseActivityType(activity.activityType),
-        dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
-        startTime: activityTime(activity.startTimeMinutesFromMidnight),
-        announcement: Boolean(activity.Announcement),
-        countdown: Boolean(activity.Countdown),
-        registration: Boolean(activity.Registration),
-      })),
-    },
+    activities: event.activities.map((activity) => ({
+      id: activity.id,
+      name: activity.name,
+      type: parseActivityType(activity.activityType),
+      dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
+      startTime: activityTime(activity.startTimeMinutesFromMidnight),
+      announcement: Boolean(activity.Announcement),
+      countdown: Boolean(activity.Countdown),
+      registration: Boolean(activity.Registration),
+    })),
   });
 };
 
 export default function Event() {
   const { t } = useTranslation();
-  const { event } = useLoaderData<typeof loader>();
+  const { slug } = useParams();
+  const { activities } = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <PageHeaderTitle>{event.name}</PageHeaderTitle>
-      <PageBody>
-        <div className="flex flex-row items-center justify-between pb-2">
-          <h2 className="text-xl font-bold text-gray-900">
-            {t("admin.event.activities.table.header")}
-          </h2>
-          <div>
-            <Link to="activities/new">
-              {t("admin.event.activities.table.createActivity")}
-            </Link>
-          </div>
+    <>
+      <div className="flex flex-row items-center justify-between pb-2">
+        <h2 className="text-xl font-bold text-gray-900">
+          {t("admin.event.activities.table.header")}
+        </h2>
+        <div>
+          <Link to="activities/new">
+            {t("admin.event.activities.table.createActivity")}
+          </Link>
         </div>
-        <Table striped>
-          <Table.Head>
-            <Table.HeadCell>{t("activity.model.name")}</Table.HeadCell>
-            <Table.HeadCell>{t("activity.model.type")}</Table.HeadCell>
-            <Table.HeadCell>{t("activity.model.dayOfWeek")}</Table.HeadCell>
-            <Table.HeadCell>{t("activity.model.time")}</Table.HeadCell>
-            <Table.HeadCell>
-              {t("admin.event.activities.table.actions")}
-            </Table.HeadCell>
-          </Table.Head>
-          <Table.Body>
-            {event.activities.map((activity) => (
-              <Table.Row key={activity.id}>
-                <Table.Cell>{activity.name}</Table.Cell>
-                <Table.Cell>
-                  {t(`activity.model.type.${activity.type}`)}
-                </Table.Cell>
-                <Table.Cell className="capitalize">
-                  {t(`activity.model.dayOfWeek.${activity.dayOfWeek}`)}
-                </Table.Cell>
-                <Table.Cell>{activity.startTime}</Table.Cell>
-                <Table.Cell className="space-x-2">
-                  <MinimalisticLink to={`activities/${activity.id}`}>
-                    {t("admin.event.activities.table.updateActivity")}
-                  </MinimalisticLink>
-                  <MinimalisticLink
-                    to={`activities/${activity.id}?action=duplicate`}
-                  >
-                    {t("admin.event.activities.table.duplicateActivity")}
-                  </MinimalisticLink>
-                  <DeleteActivityButton
-                    className={MinimalisticLinkStyling}
-                    activityId={activity.id}
-                  >
-                    {t("admin.event.activities.delete")}
-                  </DeleteActivityButton>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-        <h2 className="text-xl font-bold text-gray-900">Shortcuts</h2>
-        <ul>
-          <li>
-            <MinimalisticLink to={`/schedule/${event.slug}`}>
-              Tidsplan
-            </MinimalisticLink>
-          </li>
-          <li>Link til dashboard</li>
-        </ul>
-      </PageBody>
-    </div>
+      </div>
+      <Table striped>
+        <Table.Head>
+          <Table.HeadCell>{t("activity.model.name")}</Table.HeadCell>
+          <Table.HeadCell>{t("activity.model.type")}</Table.HeadCell>
+          <Table.HeadCell>{t("activity.model.dayOfWeek")}</Table.HeadCell>
+          <Table.HeadCell>{t("activity.model.time")}</Table.HeadCell>
+          <Table.HeadCell>
+            {t("admin.event.activities.table.actions")}
+          </Table.HeadCell>
+        </Table.Head>
+        <Table.Body>
+          {activities.map((activity) => (
+            <Table.Row key={activity.id}>
+              <Table.Cell>{activity.name}</Table.Cell>
+              <Table.Cell>
+                {t(`activity.model.type.${activity.type}`)}
+              </Table.Cell>
+              <Table.Cell className="capitalize">
+                {t(`activity.model.dayOfWeek.${activity.dayOfWeek}`)}
+              </Table.Cell>
+              <Table.Cell>{activity.startTime}</Table.Cell>
+              <Table.Cell className="space-x-2">
+                <MinimalisticLink to={`activities/${activity.id}`}>
+                  {t("admin.event.activities.table.updateActivity")}
+                </MinimalisticLink>
+                <MinimalisticLink
+                  to={`activities/${activity.id}?action=duplicate`}
+                >
+                  {t("admin.event.activities.table.duplicateActivity")}
+                </MinimalisticLink>
+                <DeleteActivityButton
+                  className={MinimalisticLinkStyling}
+                  activityId={activity.id}
+                >
+                  {t("admin.event.activities.delete")}
+                </DeleteActivityButton>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+      <h2 className="text-xl font-bold text-gray-900">Shortcuts</h2>
+      <ul>
+        <li>
+          <MinimalisticLink to={`/schedule/${slug}`}>Tidsplan</MinimalisticLink>
+        </li>
+        <li>Link til dashboard</li>
+      </ul>
+    </>
   );
 }
 

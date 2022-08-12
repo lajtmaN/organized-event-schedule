@@ -9,8 +9,6 @@ import {
   extractActivityFromFormData,
 } from "~/components/activities/CreateUpdateForm";
 import { FormErrorMessage } from "~/components/form-error-message";
-import { PageBody } from "~/components/page-body";
-import { PageHeaderTitle } from "~/components/page-header";
 import { upsertActivity } from "~/services/activity.server";
 import { eventExistsOrThrow, findEventOrThrow } from "~/services/event.server";
 
@@ -68,43 +66,41 @@ export default function CreateActivity() {
     actionData?.errors?.find((err) => err.field === field)?.error;
   return (
     <div>
-      <PageHeaderTitle>
+      <h2 className="text-xl font-bold text-gray-900">
         {t("admin.event.activities.create.title")}
-      </PageHeaderTitle>
-      <PageBody>
-        <CreateUpdateForm>
-          <CreateUpdateActivityFields.Name error={getErrorForField("name")} />
-          <CreateUpdateActivityFields.Type error={getErrorForField("type")} />
-          <CreateUpdateActivityFields.DayOfWeek
-            error={getErrorForField("dayOfWeek")}
-          />
-          <CreateUpdateActivityFields.StartTime
-            error={getErrorForField("startTime")}
-          />
-          <CreateUpdateActivityFields.DurationMinutes
-            error={getErrorForField("durationMinutes")}
-          />
+      </h2>
+      <CreateUpdateForm>
+        <CreateUpdateActivityFields.Name error={getErrorForField("name")} />
+        <CreateUpdateActivityFields.Type error={getErrorForField("type")} />
+        <CreateUpdateActivityFields.DayOfWeek
+          error={getErrorForField("dayOfWeek")}
+        />
+        <CreateUpdateActivityFields.StartTime
+          error={getErrorForField("startTime")}
+        />
+        <CreateUpdateActivityFields.DurationMinutes
+          error={getErrorForField("durationMinutes")}
+        />
 
-          <div className="flex flex-row items-center gap-4">
-            <Button type="submit">
-              {transition?.state === "submitting"
-                ? t("admin.event.activities.create.submitting")
-                : t("admin.event.activities.create.submit")}
-            </Button>
-            <Label>
-              <div className="flex items-center space-x-2">
-                <Checkbox name="create-another" />
-                <span>{t("admin.event.activities.create.createMore")}</span>
-              </div>
-            </Label>
-          </div>
-          <FormErrorMessage>{getErrorForField("activity")}</FormErrorMessage>
+        <div className="flex flex-row items-center gap-4">
+          <Button type="submit">
+            {transition?.state === "submitting"
+              ? t("admin.event.activities.create.submitting")
+              : t("admin.event.activities.create.submit")}
+          </Button>
+          <Label>
+            <div className="flex items-center space-x-2">
+              <Checkbox name="create-another" />
+              <span>{t("admin.event.activities.create.createMore")}</span>
+            </div>
+          </Label>
+        </div>
+        <FormErrorMessage>{getErrorForField("activity")}</FormErrorMessage>
 
-          {previouslyCreatedActivity ? (
-            <em>{previouslyCreatedActivity} was created...</em>
-          ) : null}
-        </CreateUpdateForm>
-      </PageBody>
+        {previouslyCreatedActivity ? (
+          <em>{previouslyCreatedActivity} was created...</em>
+        ) : null}
+      </CreateUpdateForm>
     </div>
   );
 }

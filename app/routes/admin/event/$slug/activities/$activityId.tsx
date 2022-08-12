@@ -10,8 +10,6 @@ import {
   extractActivityFromFormData,
 } from "~/components/activities/CreateUpdateForm";
 import { FormErrorMessage } from "~/components/form-error-message";
-import { PageBody } from "~/components/page-body";
-import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
 import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
@@ -108,47 +106,45 @@ export default function EditActivity() {
     actionData?.errors?.find((err) => err.field === field)?.error;
   return (
     <div>
-      <PageHeaderTitle>
+      <h2 className="text-xl font-bold text-gray-900">
         {t(`admin.event.activities.${requestedAction}.title`)}
-      </PageHeaderTitle>
-      <PageBody>
-        <CreateUpdateForm>
-          <CreateUpdateActivityFields.Name
-            error={getErrorForField("name")}
-            defaultValue={defaultData.name}
-          />
-          <CreateUpdateActivityFields.Type
-            error={getErrorForField("type")}
-            defaultValue={defaultData.type}
-          />
-          <CreateUpdateActivityFields.DayOfWeek
-            error={getErrorForField("dayOfWeek")}
-            defaultValue={defaultData.dayOfWeek}
-          />
-          <CreateUpdateActivityFields.StartTime
-            error={getErrorForField("startTime")}
-            defaultValue={defaultData.startTime}
-          />
-          <CreateUpdateActivityFields.DurationMinutes
-            error={getErrorForField("durationMinutes")}
-            defaultValue={defaultData.durationMinutes ?? undefined}
-          />
-          <Button type="submit" value={requestedAction} name="_action">
-            {transition?.state === "submitting"
-              ? t(`admin.event.activities.${requestedAction}.submitting`)
-              : t(`admin.event.activities.${requestedAction}.submit`)}
-          </Button>
-          {requestedAction === "update" && lastUpdatedAt ? (
-            <em>
-              Last updated at:{" "}
-              <time dateTime={lastUpdatedAt}>
-                {new Date(lastUpdatedAt).toLocaleString()}
-              </time>
-            </em>
-          ) : null}
-          <FormErrorMessage>{getErrorForField("activity")}</FormErrorMessage>
-        </CreateUpdateForm>
-      </PageBody>
+      </h2>
+      <CreateUpdateForm>
+        <CreateUpdateActivityFields.Name
+          error={getErrorForField("name")}
+          defaultValue={defaultData.name}
+        />
+        <CreateUpdateActivityFields.Type
+          error={getErrorForField("type")}
+          defaultValue={defaultData.type}
+        />
+        <CreateUpdateActivityFields.DayOfWeek
+          error={getErrorForField("dayOfWeek")}
+          defaultValue={defaultData.dayOfWeek}
+        />
+        <CreateUpdateActivityFields.StartTime
+          error={getErrorForField("startTime")}
+          defaultValue={defaultData.startTime}
+        />
+        <CreateUpdateActivityFields.DurationMinutes
+          error={getErrorForField("durationMinutes")}
+          defaultValue={defaultData.durationMinutes ?? undefined}
+        />
+        <Button type="submit" value={requestedAction} name="_action">
+          {transition?.state === "submitting"
+            ? t(`admin.event.activities.${requestedAction}.submitting`)
+            : t(`admin.event.activities.${requestedAction}.submit`)}
+        </Button>
+        {requestedAction === "update" && lastUpdatedAt ? (
+          <em>
+            Last updated at:{" "}
+            <time dateTime={lastUpdatedAt}>
+              {new Date(lastUpdatedAt).toLocaleString()}
+            </time>
+          </em>
+        ) : null}
+        <FormErrorMessage>{getErrorForField("activity")}</FormErrorMessage>
+      </CreateUpdateForm>
     </div>
   );
 }
