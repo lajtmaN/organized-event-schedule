@@ -65,7 +65,7 @@ export default function Index() {
                     <StatusBadge status={event.status} />
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/admin/event/${event.slug}`} prefetch="intent">
+                    <Link to={`event/${event.slug}`} prefetch="intent">
                       <Button>
                         {t("admin.events.table.edit")}
                         <ChevronRightIcon className="ml-2 h-4" />

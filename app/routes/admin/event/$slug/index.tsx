@@ -16,7 +16,7 @@ import { prisma } from "~/db.server";
 import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
 import { notFound } from "~/server/utils/notFound";
-import { DeleteActivityButton } from "./$slug.activities/$activityId.delete";
+import { DeleteActivityButton } from "./activities/$activityId.delete";
 
 export const loader = async ({ params }: LoaderArgs) => {
   invariant(params.slug, "slug is required");
