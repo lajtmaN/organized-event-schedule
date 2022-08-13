@@ -9,6 +9,7 @@ import {
   extractActivityFromFormData,
 } from "~/components/activities/create-update-form";
 import { FormErrorMessage } from "~/components/form-error-message";
+import { Heading } from "~/components/heading";
 import { upsertActivity } from "~/services/activity.server";
 import { eventExistsOrThrow, findEventOrThrow } from "~/services/event.server";
 
@@ -66,9 +67,7 @@ export default function CreateActivity() {
     actionData?.errors?.find((err) => err.field === field)?.error;
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900">
-        {t("admin.event.activities.create.title")}
-      </h2>
+      <Heading>{t("admin.event.activities.create.title")}</Heading>
       <CreateUpdateForm>
         <CreateUpdateActivityFields.Name error={getErrorForField("name")} />
         <CreateUpdateActivityFields.Type error={getErrorForField("type")} />

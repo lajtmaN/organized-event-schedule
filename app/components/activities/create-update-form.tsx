@@ -18,7 +18,10 @@ export const CreateUpdateForm = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Form method="post" className="flex flex-col gap-4 rounded-md p-5 shadow-md">
+  <Form
+    method="post"
+    className="mt-3 flex flex-col gap-4 rounded-md border p-5 shadow-md"
+  >
     {children}
   </Form>
 );

@@ -10,6 +10,7 @@ import {
   extractActivityFromFormData,
 } from "~/components/activities/create-update-form";
 import { FormErrorMessage } from "~/components/form-error-message";
+import { Heading } from "~/components/heading";
 import { prisma } from "~/db.server";
 import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
@@ -106,9 +107,7 @@ export default function EditActivity() {
     actionData?.errors?.find((err) => err.field === field)?.error;
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900">
-        {t(`admin.event.activities.${requestedAction}.title`)}
-      </h2>
+      <Heading>{t(`admin.event.activities.${requestedAction}.title`)}</Heading>
       <CreateUpdateForm>
         <CreateUpdateActivityFields.Name
           error={getErrorForField("name")}

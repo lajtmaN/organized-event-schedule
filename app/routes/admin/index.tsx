@@ -42,7 +42,7 @@ export default function Index() {
     <div>
       <PageHeaderTitle>{t("admin.events.title")}</PageHeaderTitle>
       <PageBody>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative overflow-x-auto border shadow-md sm:rounded-lg">
           <Table striped>
             <Table.Head>
               <Table.HeadCell>{t("event.model.name")}</Table.HeadCell>

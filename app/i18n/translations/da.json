@@ -1,12 +1,18 @@
 {
   "event.model.name": "Navn",
   "event.model.startDate": "Startdato",
+  "event.model.startDate.helpText": "Hvornår starter eventet?",
   "event.model.endDate": "Slutdato",
+  "event.model.endDate.helpText": "Hvornår slutter eventet?",
+  "event.model.published": "Publiseret",
+  "event.model.published.helpText": "Gør dette event offentligt tilgængeligt",
   "event.model.status": "Status",
   "event.model.status.draft": "Kladde",
   "event.model.status.live": "Live",
   "event.model.status.past": "Tidligere",
   "event.model.status.future": "Fremtidigt",
+  "event.model.slug": "Slug",
+  "event.model.slug.helpText": "Slug er et unikt navn, der bruges til at finde eventet. <strong>Kan ikke rettes når eventet er publiseret.</strong>",
 
   "activity.model.name": "Navn",
   "activity.model.type": "Type",
@@ -28,6 +34,13 @@
   "admin.events.title": "Events",
   "admin.events.table.edit": "Rediger",
 
+  "admin.event.details.title": "Eventdetaljer",
+  "admin.event.details.edit": "Rediger event",
+
+  "admin.event.edit.title": "Rediger event",
+  "admin.event.edit.submit": "Gem ændringer",
+  "admin.event.edit.submitting": "Gemmer...",
+
   "admin.event.activities.table.header": "Aktiviteter",
   "admin.event.activities.table.createActivity": "Opret aktivitet",
   "admin.event.activities.table.actions": "Ret",
@@ -40,8 +53,8 @@
   "admin.event.activities.create.createMore": "Opret flere?",
 
   "admin.event.activities.update.title": "Opdatér aktivitet",
-  "admin.event.activities.update.submit": "Opdatér",
-  "admin.event.activities.update.submitting": "Opdatérer...",
+  "admin.event.activities.update.submit": "Gem ændringer",
+  "admin.event.activities.update.submitting": "Gemmer...",
 
   "admin.event.activities.duplicate.title": "Dupliker aktivitet",
   "admin.event.activities.duplicate.submit": "Dupliker",

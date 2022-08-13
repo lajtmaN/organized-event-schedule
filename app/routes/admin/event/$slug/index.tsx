@@ -1,10 +1,11 @@
 import { useCatch, useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
-import { Table } from "flowbite-react";
+import { Card, Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import invariant from "tiny-invariant";
 import { ErrorAlert } from "~/components/error-alert";
+import { Heading } from "~/components/heading";
 import {
   Link,
   MinimalisticLink,
@@ -21,6 +22,9 @@ export const loader = async ({ params }: LoaderArgs) => {
   const event = await prisma.event.findUnique({
     where: { slug: params.slug },
     select: {
+      startDate: true,
+      endDate: true,
+
       activities: {
         select: {
           id: true,
@@ -48,6 +52,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
 
   return json({
+    event: { startDate: event.startDate, endDate: event.endDate },
     activities: event.activities.map((activity) => ({
       id: activity.id,
       name: activity.name,
@@ -64,21 +69,37 @@ export const loader = async ({ params }: LoaderArgs) => {
 export default function Event() {
   const { t } = useTranslation();
   const { slug } = useParams();
-  const { activities } = useLoaderData<typeof loader>();
+  const { event, activities } = useLoaderData<typeof loader>();
 
   return (
-    <>
-      <div className="flex flex-row items-center justify-between pb-2">
-        <h2 className="text-xl font-bold text-gray-900">
-          {t("admin.event.activities.table.header")}
-        </h2>
+    <div className="space-y-3">
+      <Heading>{t("admin.event.details.title")}</Heading>
+      <Card>
+        <ul className="list-inside list-disc">
+          <li className="">
+            {t("event.model.startDate")}:{" "}
+            {new Date(event.startDate).toLocaleString()}
+          </li>
+          <li>
+            {t("event.model.endDate")}:{" "}
+            {new Date(event.endDate).toLocaleString()}
+          </li>
+          <li>
+            <MinimalisticLink to="edit">
+              {t("admin.event.details.edit")}
+            </MinimalisticLink>
+          </li>
+        </ul>
+      </Card>
+      <div className="flex flex-row items-center justify-between pt-2">
+        <Heading>{t("admin.event.activities.table.header")}</Heading>
         <div>
           <Link to="activities/new">
             {t("admin.event.activities.table.createActivity")}
           </Link>
         </div>
       </div>
-      <Table striped>
+      <Table striped className="border">
         <Table.Head>
           <Table.HeadCell>{t("activity.model.name")}</Table.HeadCell>
           <Table.HeadCell>{t("activity.model.type")}</Table.HeadCell>
@@ -119,14 +140,14 @@ export default function Event() {
           ))}
         </Table.Body>
       </Table>
-      <h2 className="text-xl font-bold text-gray-900">Shortcuts</h2>
+      <Heading>Shortcuts</Heading>
       <ul>
         <li>
           <MinimalisticLink to={`/schedule/${slug}`}>Tidsplan</MinimalisticLink>
         </li>
         <li>Link til dashboard</li>
       </ul>
-    </>
+    </div>
   );
 }
 
