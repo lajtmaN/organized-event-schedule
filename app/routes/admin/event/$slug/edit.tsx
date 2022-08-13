@@ -91,7 +91,6 @@ export default function EditEventRoute() {
           }
         />
         <CreateUpdateEventFields.Slug
-          defaultValue={suggestedSlug}
           value={suggestedSlug}
           onChange={(evt) => setSuggestedSlug(evt.target.value)}
           disabled={isSlugLocked}

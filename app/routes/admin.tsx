@@ -67,6 +67,7 @@ export default function AdminNavbar() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
+  // eslint-disable-next-line no-console
   console.error(error);
 
   return <ErrorAlert>An unexpected error occurred: {error.message}</ErrorAlert>;

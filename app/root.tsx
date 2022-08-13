@@ -40,6 +40,7 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
+  // eslint-disable-next-line no-console
   console.error(error);
 
   return <div>An unexpected error occurred: {error.message}</div>;
