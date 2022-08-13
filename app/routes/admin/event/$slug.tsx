@@ -2,7 +2,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import invariant from "tiny-invariant";
-import { StatusBadge } from "~/components/events/status-badge";
+import { StatusBadge } from "~/components/event/status-badge";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";

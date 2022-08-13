@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/server-runtime";
 import { Button, Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
-import { StatusBadge } from "~/components/events/status-badge";
+import { StatusBadge } from "~/components/event/status-badge";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";

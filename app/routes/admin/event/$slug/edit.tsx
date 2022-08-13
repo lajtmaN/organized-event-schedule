@@ -9,7 +9,7 @@ import invariant from "tiny-invariant";
 import {
   CreateUpdateEventFields,
   CreateUpdateForm,
-} from "~/components/events/create-update-form";
+} from "~/components/event/create-update-form";
 import { Heading } from "~/components/heading";
 import { prisma } from "~/db.server";
 import { notFound } from "~/server/utils/notFound";
