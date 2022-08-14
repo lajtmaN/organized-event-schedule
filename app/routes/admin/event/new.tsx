@@ -35,6 +35,9 @@ export async function action({ request }: ActionArgs) {
   const endDate = new Date(endDateRaw);
 
   try {
+    if (startDate.getDay() !== 5) {
+      throw new Error("Event start date is not a friday");
+    }
     if (startDate > endDate) {
       throw new Error("Start date must be before end date");
     }
