@@ -4,7 +4,7 @@ import type { DayOfWeek } from "~/models/activity-dates";
 import {
   activityTime,
   calculateActivityStartDateTime,
-  DaysOfWeek,
+  getDayOfWeekForDate,
   parseDayOfWeek,
 } from "~/models/activity-dates";
 
@@ -104,11 +104,8 @@ function generateRegistrationDeadlineActivity(
   const startTime = activityTime(
     startDateTime.getHours() * 60 + startDateTime.getMinutes()
   );
-  const dayOfWeek =
-    DaysOfWeek[startDateTime.getDay() - (7 - DaysOfWeek.length - 1)];
-  if (!dayOfWeek) {
-    throw new Error("Invalid registration start time");
-  }
+
+  const dayOfWeek = getDayOfWeekForDate(startDateTime);
   return {
     startTime,
     dayOfWeek,

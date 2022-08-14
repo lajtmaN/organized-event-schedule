@@ -51,6 +51,19 @@ export const parseDayOfWeek = (type: string): DayOfWeek => {
   }
 };
 
+export const getDayOfWeekForDate = (date: Date): DayOfWeek => {
+  switch (date.getDay()) {
+    case 5:
+      return "friday";
+    case 6:
+      return "saturday";
+    case 0:
+      return "sunday";
+    default:
+      throw new Error(`Unsupported day of week: ${date.getDay()}`);
+  }
+};
+
 /**
  * Converts the time in minutes from midnight to hours and minutes.
  * @param param0 Activity.startTimeMinutesFromMidnight
