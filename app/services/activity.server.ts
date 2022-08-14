@@ -33,30 +33,34 @@ export const upsertActivity = async (
   };
   const createFields: Prisma.ActivityUpsertArgs["create"] = {
     ...fields,
-    Registration: activity.registartionDeadlineMinutes
-      ? {
-          create: {
-            deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
-          },
-        }
-      : undefined,
-  };
-  const updateFields: Prisma.ActivityUpsertArgs["update"] = {
-    ...fields,
-    Registration: activity.registartionDeadlineMinutes
-      ? {
-          upsert: {
+    Registration:
+      activity.type === "tournament" && activity.registartionDeadlineMinutes
+        ? {
             create: {
               deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
             },
-            update: {
-              deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
+          }
+        : undefined,
+  };
+  const updateFields: Prisma.ActivityUpsertArgs["update"] = {
+    ...fields,
+    Registration:
+      activity.type === "tournament" && activity.registartionDeadlineMinutes
+        ? {
+            upsert: {
+              create: {
+                deadlineMinutesBeforeStart:
+                  activity.registartionDeadlineMinutes!,
+              },
+              update: {
+                deadlineMinutesBeforeStart:
+                  activity.registartionDeadlineMinutes!,
+              },
             },
+          }
+        : {
+            delete: true,
           },
-        }
-      : {
-          delete: true,
-        },
   };
 
   return prisma.activity.upsert({
