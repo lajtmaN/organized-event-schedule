@@ -35,8 +35,8 @@ model Activity {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Event     Event?   @relation(fields: [eventId], references: [id])
-  eventId   String?
+  Event     Event   @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId   String
 }
 
 model ActivityRegistration {
