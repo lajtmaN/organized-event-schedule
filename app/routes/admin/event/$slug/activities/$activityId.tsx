@@ -2,6 +2,7 @@ import { useActionData, useLoaderData, useTransition } from "@remix-run/react";
 import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime";
 import { json, redirect } from "@remix-run/server-runtime";
 import { Button } from "flowbite-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import invariant from "tiny-invariant";
 import {
@@ -31,6 +32,11 @@ export async function loader({ request, params }: LoaderArgs) {
       startTimeMinutesFromMidnight: true,
       durationMinutes: true,
       updatedAt: true,
+      Registration: {
+        select: {
+          deadlineMinutesBeforeStart: true,
+        },
+      },
     },
   });
   if (!activity) {
@@ -50,6 +56,7 @@ export async function loader({ request, params }: LoaderArgs) {
       dayOfWeek: parseDayOfWeek(activity.dayOfWeek),
       startTime: activityTime(activity.startTimeMinutesFromMidnight),
       durationMinutes: activity.durationMinutes,
+      registrationDeadline: activity.Registration?.deadlineMinutesBeforeStart,
     },
     lastUpdatedAt: activity.updatedAt,
     requestedAction,
@@ -81,7 +88,9 @@ export async function action({ request, params }: ActionArgs) {
       dayOfWeek: activity.dayOfWeek,
       startTimeMinutesFromMidnight: activity.minutesFromMidnight,
       durationMinutes: activity.duration,
+      registartionDeadlineMinutes: activity.registrationDeadlineMinutes,
     });
+
     return redirect(`/admin/event/${params.slug}`);
   } catch (e) {
     return json({
@@ -101,6 +110,7 @@ export default function EditActivity() {
   const transition = useTransition();
   const { defaultData, lastUpdatedAt, requestedAction } =
     useLoaderData<typeof loader>();
+  const [type, setType] = useState(defaultData.type);
 
   const actionData = useActionData<typeof action>();
   const getErrorForField = (field: string) =>
@@ -115,7 +125,8 @@ export default function EditActivity() {
         />
         <CreateUpdateActivityFields.Type
           error={getErrorForField("type")}
-          defaultValue={defaultData.type}
+          value={type}
+          onChange={(evt) => setType(parseActivityType(evt.target.value))}
         />
         <CreateUpdateActivityFields.DayOfWeek
           error={getErrorForField("dayOfWeek")}
@@ -129,6 +140,12 @@ export default function EditActivity() {
           error={getErrorForField("durationMinutes")}
           defaultValue={defaultData.durationMinutes ?? undefined}
         />
+        {type === "tournament" && (
+          <CreateUpdateActivityFields.RegistrationDeadline
+            error={getErrorForField("durationMinutes")}
+            defaultValue={defaultData.registrationDeadline ?? undefined}
+          />
+        )}
         <Button type="submit" value={requestedAction} name="_action">
           {transition?.state === "submitting"
             ? t(`admin.event.activities.${requestedAction}.submitting`)

@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "~/db.server";
 import type { DayOfWeek } from "~/models/activity-dates";
 import { validateStartTime } from "~/models/activity-dates";
@@ -12,6 +13,7 @@ export const upsertActivity = async (
     dayOfWeek: DayOfWeek;
     startTimeMinutesFromMidnight: number;
     durationMinutes: number | null;
+    registartionDeadlineMinutes: number | null;
   }
 ) => {
   const event = await prisma.event.findUniqueOrThrow({
@@ -20,6 +22,7 @@ export const upsertActivity = async (
   });
   validateStartTime({ startDate: event.startDate }, activity);
 
+  const activityIdToSearchFor = activity.id ?? "CREATE_NEW"; // if no ID we will search for CREATE_NEW which will never exist and thus always do a create
   const fields = {
     eventId: eventId,
     activityType: activity.type,
@@ -28,11 +31,38 @@ export const upsertActivity = async (
     startTimeMinutesFromMidnight: activity.startTimeMinutesFromMidnight,
     durationMinutes: activity.durationMinutes,
   };
+  const createFields: Prisma.ActivityUpsertArgs["create"] = {
+    ...fields,
+    Registration: activity.registartionDeadlineMinutes
+      ? {
+          create: {
+            deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
+          },
+        }
+      : undefined,
+  };
+  const updateFields: Prisma.ActivityUpsertArgs["update"] = {
+    ...fields,
+    Registration: activity.registartionDeadlineMinutes
+      ? {
+          upsert: {
+            create: {
+              deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
+            },
+            update: {
+              deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
+            },
+          },
+        }
+      : {
+          delete: true,
+        },
+  };
 
   return prisma.activity.upsert({
-    where: { id: activity.id ?? "CREATE_NEW" },
-    update: fields,
-    create: fields,
+    where: { id: activityIdToSearchFor },
+    create: createFields,
+    update: updateFields,
   });
 };
 

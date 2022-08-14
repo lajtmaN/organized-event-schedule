@@ -1,4 +1,5 @@
 import { Form } from "@remix-run/react";
+import type { SelectProps, TextInputProps } from "flowbite-react";
 import { Label, Select, TextInput } from "flowbite-react";
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -26,12 +27,18 @@ export const CreateUpdateForm = ({
   </Form>
 );
 
-interface FieldProps<ValueType = string> {
+interface TextFieldProps<ValueType = string>
+  extends Omit<TextInputProps, "defaultValue"> {
+  error?: string;
+  defaultValue?: ValueType;
+}
+interface SelectFieldProps<ValueType = string>
+  extends Omit<SelectProps, "defaultValue"> {
   error?: string;
   defaultValue?: ValueType;
 }
 export const CreateUpdateActivityFields = {
-  Name: ({ error, defaultValue }: FieldProps) => (
+  Name: ({ error, defaultValue }: TextFieldProps) => (
     <Label>
       <span>
         <Trans i18nKey="activity.model.name" />
@@ -41,7 +48,7 @@ export const CreateUpdateActivityFields = {
       <FormErrorMessage>{error}</FormErrorMessage>
     </Label>
   ),
-  Type: ({ error, defaultValue }: FieldProps<ActivityType>) => {
+  Type: ({ error, defaultValue, ...rest }: SelectFieldProps<ActivityType>) => {
     const { t } = useTranslation();
     return (
       <Label>
@@ -49,7 +56,7 @@ export const CreateUpdateActivityFields = {
           {t("activity.model.type")}
           <RequiredMark />
         </span>
-        <Select name="type" required defaultValue={defaultValue}>
+        <Select {...rest} name="type" required defaultValue={defaultValue}>
           {ActivityTypes.map((type) => (
             <option value={type} key={type}>
               {t(`activity.model.type.${type}`)}
@@ -60,7 +67,7 @@ export const CreateUpdateActivityFields = {
       </Label>
     );
   },
-  DayOfWeek: ({ error, defaultValue }: FieldProps<DayOfWeek>) => {
+  DayOfWeek: ({ error, defaultValue }: SelectFieldProps<DayOfWeek>) => {
     const { t } = useTranslation();
     return (
       <Label>
@@ -79,7 +86,7 @@ export const CreateUpdateActivityFields = {
       </Label>
     );
   },
-  StartTime: ({ error, defaultValue }: FieldProps) => (
+  StartTime: ({ error, defaultValue }: TextFieldProps) => (
     <Label>
       <span>
         <Trans i18nKey="activity.model.time" />
@@ -96,7 +103,7 @@ export const CreateUpdateActivityFields = {
       <FormErrorMessage>{error}</FormErrorMessage>
     </Label>
   ),
-  DurationMinutes: ({ error, defaultValue }: FieldProps<number>) => (
+  DurationMinutes: ({ error, defaultValue }: TextFieldProps<number>) => (
     <Label>
       <span>
         <Trans i18nKey="activity.model.durationMinutes" />
@@ -111,6 +118,21 @@ export const CreateUpdateActivityFields = {
       <FormErrorMessage>{error}</FormErrorMessage>
     </Label>
   ),
+  RegistrationDeadline: ({ error, defaultValue }: TextFieldProps<number>) => (
+    <Label>
+      <Trans i18nKey="activity.model.registration.deadline" />
+      <TextInput
+        type="number"
+        name="registrationDeadline"
+        defaultValue={defaultValue}
+        helperText={
+          <Trans i18nKey="activity.model.registration.deadline.helpText" />
+        }
+        addon={<Trans i18nKey="activity.model.registration.deadline.unit" />}
+      />
+      <FormErrorMessage>{error}</FormErrorMessage>
+    </Label>
+  ),
 };
 
 export const extractActivityFromFormData = (formData: FormData) => {
@@ -121,6 +143,10 @@ export const extractActivityFromFormData = (formData: FormData) => {
   const minutesFromMidnight = getMinutesFromMidnight(startTimeRaw);
   const durationRaw = formData.get("durationMinutes");
   const duration = durationRaw ? parseInt(durationRaw.toString()) : null;
+  const registrationDeadlineRaw = formData.get("registrationDeadline");
+  const registrationDeadlineMinutes = registrationDeadlineRaw
+    ? parseInt(registrationDeadlineRaw.toString())
+    : null;
 
   const errors: Array<{ field: string; error: string }> = [];
   if (!name) errors.push({ field: "name", error: "Name is required" });
@@ -138,6 +164,7 @@ export const extractActivityFromFormData = (formData: FormData) => {
       dayOfWeek,
       minutesFromMidnight: minutesFromMidnight!,
       duration,
+      registrationDeadlineMinutes,
     },
   };
 };

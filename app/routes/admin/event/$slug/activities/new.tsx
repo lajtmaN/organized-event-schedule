@@ -2,6 +2,7 @@ import { useActionData, useTransition } from "@remix-run/react";
 import type { ActionArgs, LoaderArgs } from "@remix-run/server-runtime";
 import { json, redirect } from "@remix-run/server-runtime";
 import { Button, Checkbox, Label } from "flowbite-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   CreateUpdateActivityFields,
@@ -10,10 +11,12 @@ import {
 } from "~/components/activities/create-update-form";
 import { FormErrorMessage } from "~/components/form-error-message";
 import { Heading } from "~/components/heading";
+import type { ActivityType } from "~/models/activity-type";
+import { parseActivityType } from "~/models/activity-type";
 import { upsertActivity } from "~/services/activity.server";
 import { eventExistsOrThrow, findEventOrThrow } from "~/services/event.server";
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params }: LoaderArgs) => {
   await eventExistsOrThrow(params.slug);
   return null;
 };
@@ -37,6 +40,7 @@ export const action = async ({ request, params }: ActionArgs) => {
       dayOfWeek: activity.dayOfWeek,
       startTimeMinutesFromMidnight: activity.minutesFromMidnight,
       durationMinutes: activity.duration,
+      registartionDeadlineMinutes: activity.registrationDeadlineMinutes,
     });
     if (formData.get("create-another")) {
       return json({ result: { name: activity.name! }, errors: null });
@@ -57,8 +61,9 @@ export const action = async ({ request, params }: ActionArgs) => {
 
 export default function CreateActivity() {
   const { t } = useTranslation();
-  const transition = useTransition();
+  const [type, setType] = useState<ActivityType>("tournament");
 
+  const transition = useTransition();
   const actionData = useActionData<typeof action>();
 
   const previouslyCreatedActivity = actionData?.result?.name;
@@ -70,7 +75,11 @@ export default function CreateActivity() {
       <Heading>{t("admin.event.activities.create.title")}</Heading>
       <CreateUpdateForm>
         <CreateUpdateActivityFields.Name error={getErrorForField("name")} />
-        <CreateUpdateActivityFields.Type error={getErrorForField("type")} />
+        <CreateUpdateActivityFields.Type
+          error={getErrorForField("type")}
+          value={type}
+          onChange={(evt) => setType(parseActivityType(evt.target.value))}
+        />
         <CreateUpdateActivityFields.DayOfWeek
           error={getErrorForField("dayOfWeek")}
         />
@@ -80,6 +89,11 @@ export default function CreateActivity() {
         <CreateUpdateActivityFields.DurationMinutes
           error={getErrorForField("durationMinutes")}
         />
+        {type === "tournament" && (
+          <CreateUpdateActivityFields.RegistrationDeadline
+            error={getErrorForField("durationMinutes")}
+          />
+        )}
 
         <div className="flex flex-row items-center gap-4">
           <Button type="submit">
