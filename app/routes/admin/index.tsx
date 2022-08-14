@@ -1,9 +1,10 @@
-import { ChevronRightIcon } from "@heroicons/react/outline";
-import { Link, useLoaderData } from "@remix-run/react";
+import { ChevronRightIcon, PlusIcon } from "@heroicons/react/outline";
+import { Link as RemixLink, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/server-runtime";
 import { Button, Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import { StatusBadge } from "~/components/event/status-badge";
+import { Link } from "~/components/link";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
@@ -65,17 +66,21 @@ export default function Index() {
                     <StatusBadge status={event.status} />
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`event/${event.slug}`} prefetch="intent">
+                    <RemixLink to={`event/${event.slug}`} prefetch="intent">
                       <Button>
                         {t("admin.events.table.edit")}
                         <ChevronRightIcon className="ml-2 h-4" />
                       </Button>
-                    </Link>
+                    </RemixLink>
                   </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
           </Table>
+          <Link to="event/new" className="m-3">
+            <PlusIcon className="mr-2 h-5" />
+            {t("admin.events.createNew")}
+          </Link>
         </div>
       </PageBody>
     </div>

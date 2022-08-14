@@ -33,6 +33,7 @@
   "admin.nav.confirmLogout": "Tryk igen for at logge ud",
   "admin.events.title": "Events",
   "admin.events.table.edit": "Rediger",
+  "admin.events.createNew": "Opret nyt event",
 
   "admin.event.details.title": "Eventdetaljer",
   "admin.event.details.edit": "Rediger event",
@@ -40,6 +41,9 @@
   "admin.event.edit.title": "Rediger event",
   "admin.event.edit.submit": "Gem ændringer",
   "admin.event.edit.submitting": "Gemmer...",
+
+  "admin.event.create.title": "Opret event",
+  "admin.event.create.submit": "Opret",
 
   "admin.event.activities.table.header": "Aktiviteter",
   "admin.event.activities.table.createActivity": "Opret aktivitet",
