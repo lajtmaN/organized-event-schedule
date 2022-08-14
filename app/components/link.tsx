@@ -20,3 +20,6 @@ export const MinimalisticLink = (props: RemixLinkProps) => (
 
 export const MinimalisticLinkStyling =
   "text-base text-indigo-500 hover:text-indigo-700 hover:underline" as const;
+
+export const DangerMinimalisticLinkStyling =
+  "text-base text-red-500 hover:text-red-700 hover:underline" as const;

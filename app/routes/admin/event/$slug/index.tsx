@@ -7,6 +7,7 @@ import invariant from "tiny-invariant";
 import { ErrorAlert } from "~/components/error-alert";
 import { Heading } from "~/components/heading";
 import {
+  DangerMinimalisticLinkStyling,
   Link,
   MinimalisticLink,
   MinimalisticLinkStyling,
@@ -16,6 +17,7 @@ import { activityTime, parseDayOfWeek } from "~/models/activity-dates";
 import { parseActivityType } from "~/models/activity-type";
 import { notFound } from "~/server/utils/notFound";
 import { DeleteActivityButton } from "./activities/$activityId.delete";
+import { DeleteEventButton } from "./delete";
 
 export const loader = async ({ params }: LoaderArgs) => {
   invariant(params.slug, "slug is required");
@@ -70,26 +72,37 @@ export default function Event() {
   const { t } = useTranslation();
   const { slug } = useParams();
   const { event, activities } = useLoaderData<typeof loader>();
+  if (!slug) {
+    return <div>Slug is required</div>;
+  }
 
   return (
     <div className="space-y-3">
       <Heading>{t("admin.event.details.title")}</Heading>
       <Card>
-        <ul className="list-inside list-disc">
-          <li className="">
-            {t("event.model.startDate")}:{" "}
-            {new Date(event.startDate).toLocaleString()}
-          </li>
-          <li>
-            {t("event.model.endDate")}:{" "}
-            {new Date(event.endDate).toLocaleString()}
-          </li>
-          <li>
-            <MinimalisticLink to="edit">
-              {t("admin.event.details.edit")}
-            </MinimalisticLink>
-          </li>
-        </ul>
+        <div className="flex flex-row justify-between">
+          <ul className="list-inside list-disc">
+            <li className="">
+              {t("event.model.startDate")}:{" "}
+              {new Date(event.startDate).toLocaleString()}
+            </li>
+            <li>
+              {t("event.model.endDate")}:{" "}
+              {new Date(event.endDate).toLocaleString()}
+            </li>
+            <li>
+              <MinimalisticLink to="edit">
+                {t("admin.event.details.edit")}
+              </MinimalisticLink>
+            </li>
+          </ul>
+          <DeleteEventButton
+            slug={slug}
+            className={DangerMinimalisticLinkStyling}
+          >
+            {t("admin.event.details.delete")}
+          </DeleteEventButton>
+        </div>
       </Card>
       <div className="flex flex-row items-center justify-between pt-2">
         <Heading>{t("admin.event.activities.table.header")}</Heading>

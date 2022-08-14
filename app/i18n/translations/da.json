@@ -37,6 +37,7 @@
 
   "admin.event.details.title": "Eventdetaljer",
   "admin.event.details.edit": "Rediger event",
+  "admin.event.details.delete": "Slet dette event",
 
   "admin.event.edit.title": "Rediger event",
   "admin.event.edit.submit": "Gem ændringer",
@@ -44,6 +45,8 @@
 
   "admin.event.create.title": "Opret event",
   "admin.event.create.submit": "Opret",
+
+  "admin.event.delete.confirm": "Er du sikker på at du vil slette dette event?",
 
   "admin.event.activities.table.header": "Aktiviteter",
   "admin.event.activities.table.createActivity": "Opret aktivitet",
