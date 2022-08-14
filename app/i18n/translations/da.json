@@ -53,6 +53,8 @@
   "admin.event.activities.table.actions": "Ret",
   "admin.event.activities.table.updateActivity": "Opdatér",
   "admin.event.activities.table.duplicateActivity": "Dupliker",
+  "admin.event.activities.table.noResults": "Ingen aktiviteter fundet...",
+  "admin.event.activities.table.copyActivities": "Kopier aktiviteter fra et tidligere event",
 
   "admin.event.activities.create.title": "Opret aktivitet",
   "admin.event.activities.create.submit": "Opret",

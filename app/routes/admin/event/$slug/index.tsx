@@ -123,34 +123,46 @@ export default function Event() {
           </Table.HeadCell>
         </Table.Head>
         <Table.Body>
-          {activities.map((activity) => (
-            <Table.Row key={activity.id}>
-              <Table.Cell>{activity.name}</Table.Cell>
-              <Table.Cell>
-                {t(`activity.model.type.${activity.type}`)}
-              </Table.Cell>
-              <Table.Cell className="capitalize">
-                {t(`activity.model.dayOfWeek.${activity.dayOfWeek}`)}
-              </Table.Cell>
-              <Table.Cell>{activity.startTime}</Table.Cell>
-              <Table.Cell className="space-x-2">
-                <MinimalisticLink to={`activities/${activity.id}`}>
-                  {t("admin.event.activities.table.updateActivity")}
+          {activities.length === 0 ? (
+            <Table.Row>
+              <Table.Cell colSpan={5}>
+                {t("admin.event.activities.table.noResults")}
+                <br />
+                <MinimalisticLink to="activities/seed">
+                  {t("admin.event.activities.table.copyActivities")}
                 </MinimalisticLink>
-                <MinimalisticLink
-                  to={`activities/${activity.id}?action=duplicate`}
-                >
-                  {t("admin.event.activities.table.duplicateActivity")}
-                </MinimalisticLink>
-                <DeleteActivityButton
-                  className={MinimalisticLinkStyling}
-                  activityId={activity.id}
-                >
-                  {t("admin.event.activities.delete")}
-                </DeleteActivityButton>
               </Table.Cell>
             </Table.Row>
-          ))}
+          ) : (
+            activities.map((activity) => (
+              <Table.Row key={activity.id}>
+                <Table.Cell>{activity.name}</Table.Cell>
+                <Table.Cell>
+                  {t(`activity.model.type.${activity.type}`)}
+                </Table.Cell>
+                <Table.Cell className="capitalize">
+                  {t(`activity.model.dayOfWeek.${activity.dayOfWeek}`)}
+                </Table.Cell>
+                <Table.Cell>{activity.startTime}</Table.Cell>
+                <Table.Cell className="space-x-2">
+                  <MinimalisticLink to={`activities/${activity.id}`}>
+                    {t("admin.event.activities.table.updateActivity")}
+                  </MinimalisticLink>
+                  <MinimalisticLink
+                    to={`activities/${activity.id}?action=duplicate`}
+                  >
+                    {t("admin.event.activities.table.duplicateActivity")}
+                  </MinimalisticLink>
+                  <DeleteActivityButton
+                    className={MinimalisticLinkStyling}
+                    activityId={activity.id}
+                  >
+                    {t("admin.event.activities.delete")}
+                  </DeleteActivityButton>
+                </Table.Cell>
+              </Table.Row>
+            ))
+          )}
         </Table.Body>
       </Table>
       <Heading>Shortcuts</Heading>
