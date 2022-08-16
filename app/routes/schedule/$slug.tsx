@@ -65,6 +65,7 @@ export default function ScheduleRoute() {
 }
 
 function Schedule({ schedule }: { schedule: EventSchedule }) {
+  const { t } = useTranslation();
   return (
     <>
       {keys(schedule).map((day) => (
