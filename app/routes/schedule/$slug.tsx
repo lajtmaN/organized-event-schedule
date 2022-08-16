@@ -7,7 +7,10 @@ import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
 import { prisma } from "~/db.server";
 import { notFound } from "~/server/utils/notFound";
-import type { ScheduledActivity } from "~/services/schedule.server";
+import type {
+  EventSchedule,
+  ScheduledActivity,
+} from "~/services/schedule.server";
 import { getScheduleForEvent } from "~/services/schedule.server";
 import { keys } from "~/utils";
 
@@ -45,7 +48,24 @@ export default function ScheduleRoute() {
   const { t } = useTranslation();
   const { schedule, event, kioskMode } = useLoaderData<typeof loader>();
 
-  const scheduleView = (
+  if (kioskMode) {
+    return <Schedule schedule={schedule} />;
+  }
+
+  return (
+    <div>
+      <PageHeaderTitle>
+        {t("schedule.title", { eventName: event.name })}
+      </PageHeaderTitle>
+      <PageBody>
+        <Schedule schedule={schedule} />
+      </PageBody>
+    </div>
+  );
+}
+
+function Schedule({ schedule }: { schedule: EventSchedule }) {
+  return (
     <>
       {keys(schedule).map((day) => (
         <div key={day} className="flex border-b-2 last-of-type:border-b-0">
@@ -60,19 +80,6 @@ export default function ScheduleRoute() {
         </div>
       ))}
     </>
-  );
-
-  if (kioskMode) {
-    return scheduleView;
-  }
-
-  return (
-    <div>
-      <PageHeaderTitle>
-        {t("schedule.title", { eventName: event.name })}
-      </PageHeaderTitle>
-      <PageBody>{scheduleView}</PageBody>
-    </div>
   );
 }
 
