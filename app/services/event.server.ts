@@ -21,6 +21,20 @@ export const findEventOrThrow = async (eventSlug: string | undefined) => {
   return event;
 };
 
+export const latestPublishedEventSlug = () => {
+  return prisma.event.findFirst({
+    where: {
+      published: true,
+    },
+    orderBy: {
+      startDate: "desc",
+    },
+    select: {
+      slug: true,
+    },
+  });
+};
+
 export const isEventCurrentlyRunning = (
   event: Pick<Event, "startDate" | "endDate">
 ) => {

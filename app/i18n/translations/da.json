@@ -76,5 +76,10 @@
   "admin.event.activities.delete.confirm": "Er du sikker på du vil slette denne aktivitet?",
 
   "schedule.title": "Tidsplan for {{eventName}}",
-  "schedule.activity.registration.deadlineText": "Tilmelding lukker ({{activityName}})"
+  "schedule.description": "Se denne tidsplan for at se hvad der kommer til at ske i løbet af eventet.",
+  "schedule.activity.registration.deadlineText": "Tilmelding lukker ({{activityName}})",
+
+  "widget.join-discord.title": "Følg med på Discord",
+  "widget.join-discord.subtitle": "nnp.dk/discord",
+  "widget.join-discord.href": "https://nnp.dk/discord"
 }

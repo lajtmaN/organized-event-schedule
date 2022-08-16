@@ -8,5 +8,5 @@ export async function loader() {
   if (!latestEvent) {
     return notFound("No published events found");
   }
-  return redirect(`/schedule/${latestEvent.slug}`);
+  return redirect(`/dashboard/${latestEvent.slug}`);
 }

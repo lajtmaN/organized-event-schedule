@@ -1,0 +1,36 @@
+.dashboard-grid {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-areas:
+        "header      logo"
+        "main-widget logo"
+        "main-widget widget-1"
+        "main-widget widget-2"
+        "main-widget widget-3"
+        "footer      footer";
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 40px auto 1fr 1fr 1fr 20px;
+}
+
+.dashboard-grid > .grid-area.grid-area-header {
+    grid-area: header;
+}
+.dashboard-grid > .grid-area.grid-area-logo {
+    grid-area: logo;
+}
+.dashboard-grid > .grid-area.grid-area-main-widget {
+    grid-area: main-widget;
+}
+.dashboard-grid > .grid-area.grid-area-widget-1 {
+    grid-area: widget-1;
+}
+.dashboard-grid > .grid-area.grid-area-widget-2 {
+    grid-area: widget-2;
+}
+.dashboard-grid > .grid-area.grid-area-widget-3 {
+    grid-area: widget-3;
+}
+.dashboard-grid > .grid-area.grid-area-footer {
+    grid-area: footer;
+}
