@@ -4,6 +4,7 @@ import { json } from "@remix-run/server-runtime";
 import { Button, Table } from "flowbite-react";
 import { useTranslation } from "react-i18next";
 import { StatusBadge } from "~/components/event/status-badge";
+import { Heading } from "~/components/heading";
 import { Link } from "~/components/link";
 import { PageBody } from "~/components/page-body";
 import { PageHeaderTitle } from "~/components/page-header";
@@ -33,16 +34,18 @@ export const loader = async () => {
       endDate: event.endDate,
     }),
   }));
-  return json({ events: mapped });
+  const assetCount = await prisma.asset.count();
+  return json({ events: mapped, assetCount });
 };
 
 export default function Index() {
   const { t } = useTranslation();
-  const { events } = useLoaderData<typeof loader>();
+  const { events, assetCount } = useLoaderData<typeof loader>();
   return (
     <div>
-      <PageHeaderTitle>{t("admin.events.title")}</PageHeaderTitle>
+      <PageHeaderTitle>Admin</PageHeaderTitle>
       <PageBody>
+        <Heading>{t("admin.events.title")}</Heading>
         <div className="relative overflow-x-auto border shadow-md sm:rounded-lg">
           <Table striped>
             <Table.Head>
@@ -80,6 +83,16 @@ export default function Index() {
           <Link to="event/new" className="m-3">
             <PlusIcon className="mr-2 h-5" />
             {t("admin.events.createNew")}
+          </Link>
+        </div>
+
+        <hr className="my-5" />
+        <div className="w-fit">
+          <Link to="assets">
+            {t("admin.assets.navigate")}
+            <span className="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-200 text-sm">
+              {assetCount}
+            </span>
           </Link>
         </div>
       </PageBody>

@@ -81,6 +81,7 @@
   "admin.event.activities.delete": "Slet",
   "admin.event.activities.delete.confirm": "Er du sikker på du vil slette denne aktivitet?",
 
+  "admin.assets.navigate": "Administrer billeder",
   "admin.assets.title": "Billeder",
 
   "schedule.title": "Tidsplan for {{eventName}}",
