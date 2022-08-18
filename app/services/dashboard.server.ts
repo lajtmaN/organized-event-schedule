@@ -24,8 +24,10 @@ export const determineWidgetRoute = (widget: WidgetType, slug: string) => {
     case "widget-2":
       return base("countdown"); // TODO if there is any at the moment?
     case "widget-3":
-      return null; // base("sponsors");
+      return base("sponsors");
     default:
       throw new Error(`Unknown widget type: ${widget}`);
   }
 };
+
+// TODO Other widget ideas: network statistics

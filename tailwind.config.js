@@ -9,6 +9,9 @@ module.exports = {
       colors: {
         discord: "#5865f2",
       },
+      gridTemplateColumns: {
+        "auto-w-72": "repeat(auto-fill, minmax(auto, 286px))",
+      }
     },
   },
   plugins: [require("flowbite/plugin")],

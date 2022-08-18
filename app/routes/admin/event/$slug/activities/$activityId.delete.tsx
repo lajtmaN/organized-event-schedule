@@ -1,4 +1,4 @@
-import { Form, useParams } from "@remix-run/react";
+import { useFetcher, useParams } from "@remix-run/react";
 import type { ActionArgs } from "@remix-run/server-runtime";
 import { redirect } from "@remix-run/server-runtime";
 import { useTranslation } from "react-i18next";
@@ -23,8 +23,9 @@ export function DeleteActivityButton({
 }: Props) {
   const { t } = useTranslation();
   const params = useParams();
+  const fetcher = useFetcher();
   return (
-    <Form
+    <fetcher.Form
       method="post"
       className="inline-block"
       onSubmit={(evt) => {
@@ -37,6 +38,6 @@ export function DeleteActivityButton({
       <button type="submit" className={className}>
         {children}
       </button>
-    </Form>
+    </fetcher.Form>
   );
 }

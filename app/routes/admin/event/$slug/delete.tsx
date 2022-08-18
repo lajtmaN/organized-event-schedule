@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import type { ActionArgs } from "@remix-run/server-runtime";
 import { redirect } from "@remix-run/server-runtime";
 import { useTranslation } from "react-i18next";
@@ -18,9 +18,10 @@ interface Props {
   children: React.ReactNode;
 }
 export function DeleteEventButton({ slug, className, children }: Props) {
+  const fetcher = useFetcher();
   const { t } = useTranslation();
   return (
-    <Form
+    <fetcher.Form
       method="post"
       className="inline-block"
       onSubmit={(evt) => {
@@ -33,6 +34,6 @@ export function DeleteEventButton({ slug, className, children }: Props) {
       <button type="submit" className={className}>
         {children}
       </button>
-    </Form>
+    </fetcher.Form>
   );
 }

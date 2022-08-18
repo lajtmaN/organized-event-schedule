@@ -32,6 +32,12 @@
   "activity.model.registration.deadline.unit": "Minutter",
   "activity.model.registration.deadline.helpText": "Til de større turneringer kan tilmeldingen lukke lidt tid før selve turneringen starter.",
 
+  "asset.model.name": "Navn",
+  "asset.model.type": "Type",
+  "asset.model.type.sponsor": "Sponsor",
+  "asset.model.type.logo": "Vores logo",
+  "asset.model.url": "URL",
+
   "admin.nav.title": "Admin",
   "admin.nav.confirmLogout": "Tryk igen for at logge ud",
   "admin.events.title": "Events",
@@ -74,6 +80,8 @@
 
   "admin.event.activities.delete": "Slet",
   "admin.event.activities.delete.confirm": "Er du sikker på du vil slette denne aktivitet?",
+
+  "admin.assets.title": "Billeder",
 
   "schedule.title": "Tidsplan for {{eventName}}",
   "schedule.description": "Se denne tidsplan for at se hvad der kommer til at ske i løbet af eventet.",
