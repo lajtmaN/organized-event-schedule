@@ -1,4 +1,4 @@
-import type { Activity, ActivityRegistration, Event } from "@prisma/client";
+import type { Activity, ActivityRegistration } from "@prisma/client";
 import { prisma } from "~/db.server";
 import type { DayOfWeek } from "~/models/activity-dates";
 import {
@@ -7,6 +7,7 @@ import {
   getDayOfWeekForDate,
   parseDayOfWeek,
 } from "~/models/activity-dates";
+import { parseActivityType } from "~/models/activity-type";
 
 export type ScheduledActivity = {
   name: string;
@@ -27,7 +28,9 @@ export async function getScheduleForEvent(
     throw new Error("Could not find event with id " + eventId);
   }
   const eventActivities = await prisma.activity.findMany({
-    where: { eventId },
+    where: {
+      eventId,
+    },
     select: {
       name: true,
       activityType: true,
@@ -50,8 +53,19 @@ export async function getScheduleForEvent(
   };
 
   for (const activity of eventActivities) {
-    const registration = generateRegistrationDeadlineActivity(
+    const activityStartDateTime = calculateActivityStartDateTime(
       event,
+      activity
+    );
+    if (parseActivityType(activity.activityType) === "mystery") {
+      if (activityStartDateTime > new Date()) {
+        // skip mystery activities that are not yet started
+        continue;
+      }
+    }
+
+    const registration = generateRegistrationDeadlineActivity(
+      activityStartDateTime,
       activity,
       activity.Registration
     );
@@ -70,6 +84,7 @@ export async function getScheduleForEvent(
         )
       : undefined;
     const dayOfWeek = parseDayOfWeek(activity.dayOfWeek);
+
     schedule[dayOfWeek].push({
       name: activity.name,
       startTime,
@@ -82,7 +97,7 @@ export async function getScheduleForEvent(
 }
 
 function generateRegistrationDeadlineActivity(
-  event: Pick<Event, "startDate">,
+  actualStartDateTime: Date,
   originalActivity: Pick<
     Activity,
     "startTimeMinutesFromMidnight" | "dayOfWeek"
@@ -93,10 +108,6 @@ function generateRegistrationDeadlineActivity(
     return null;
   }
 
-  const actualStartDateTime = calculateActivityStartDateTime(
-    event,
-    originalActivity
-  );
   const startDateTime = new Date(
     actualStartDateTime.getTime() -
       registration.deadlineMinutesBeforeStart * 60 * 1000
