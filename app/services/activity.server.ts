@@ -23,6 +23,10 @@ export const upsertActivity = async (
   validateStartTime({ startDate: event.startDate }, activity);
 
   const activityIdToSearchFor = activity.id ?? "CREATE_NEW"; // if no ID we will search for CREATE_NEW which will never exist and thus always do a create
+  const existingRegistration = await prisma.activityRegistration.findUnique({
+    where: { activityId: activityIdToSearchFor },
+  });
+
   const fields = {
     eventId: eventId,
     activityType: activity.type,
@@ -59,7 +63,7 @@ export const upsertActivity = async (
             },
           }
         : {
-            delete: true,
+            delete: Boolean(existingRegistration),
           },
   };
 
