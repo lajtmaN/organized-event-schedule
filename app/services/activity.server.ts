@@ -14,18 +14,23 @@ export const upsertActivity = async (
     startTimeMinutesFromMidnight: number;
     durationMinutes: number | null;
     registartionDeadlineMinutes: number | null;
+    countdownMinutes: number | null;
   }
 ) => {
-  const event = await prisma.event.findUniqueOrThrow({
-    where: { id: eventId },
-    select: { startDate: true },
-  });
-  validateStartTime({ startDate: event.startDate }, activity);
-
   const activityIdToSearchFor = activity.id ?? "CREATE_NEW"; // if no ID we will search for CREATE_NEW which will never exist and thus always do a create
-  const existingRegistration = await prisma.activityRegistration.findUnique({
-    where: { activityId: activityIdToSearchFor },
-  });
+  const [event, existingRegistration, existingCountdown] = await Promise.all([
+    prisma.event.findUniqueOrThrow({
+      where: { id: eventId },
+      select: { startDate: true },
+    }),
+    prisma.activityRegistration.findUnique({
+      where: { activityId: activityIdToSearchFor },
+    }),
+    prisma.activityCountdown.findUnique({
+      where: { activityId: activityIdToSearchFor },
+    }),
+  ]);
+  validateStartTime({ startDate: event.startDate }, activity);
 
   const fields = {
     eventId: eventId,
@@ -41,10 +46,17 @@ export const upsertActivity = async (
       activity.type === "tournament" && activity.registartionDeadlineMinutes
         ? {
             create: {
-              deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes!,
+              deadlineMinutesBeforeStart: activity.registartionDeadlineMinutes,
             },
           }
         : undefined,
+    Countdown: activity.countdownMinutes
+      ? {
+          create: {
+            startCountdownMinutesBefore: activity.countdownMinutes,
+          },
+        }
+      : undefined,
   };
   const updateFields: Prisma.ActivityUpsertArgs["update"] = {
     ...fields,
@@ -65,6 +77,20 @@ export const upsertActivity = async (
         : {
             delete: Boolean(existingRegistration),
           },
+    Countdown: activity.countdownMinutes
+      ? {
+          upsert: {
+            create: {
+              startCountdownMinutesBefore: activity.countdownMinutes,
+            },
+            update: {
+              startCountdownMinutesBefore: activity.countdownMinutes,
+            },
+          },
+        }
+      : {
+          delete: Boolean(existingCountdown),
+        },
   };
 
   return prisma.activity.upsert({

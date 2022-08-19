@@ -41,6 +41,7 @@ export const action = async ({ request, params }: ActionArgs) => {
       startTimeMinutesFromMidnight: activity.minutesFromMidnight,
       durationMinutes: activity.duration,
       registartionDeadlineMinutes: activity.registrationDeadlineMinutes,
+      countdownMinutes: activity.countdownMinutes,
     });
     if (formData.get("create-another")) {
       return json({ result: { name: activity.name! }, errors: null });
@@ -94,6 +95,9 @@ export default function CreateActivity() {
             error={getErrorForField("durationMinutes")}
           />
         )}
+        <CreateUpdateActivityFields.CountdownMinutes
+          error={getErrorForField("registrationDeadline")}
+        />
 
         <div className="flex flex-row items-center gap-4">
           <Button type="submit">

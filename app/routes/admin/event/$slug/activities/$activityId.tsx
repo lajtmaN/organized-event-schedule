@@ -37,6 +37,11 @@ export async function loader({ request, params }: LoaderArgs) {
           deadlineMinutesBeforeStart: true,
         },
       },
+      Countdown: {
+        select: {
+          startCountdownMinutesBefore: true,
+        },
+      },
     },
   });
   if (!activity) {
@@ -57,6 +62,7 @@ export async function loader({ request, params }: LoaderArgs) {
       startTime: activityTime(activity.startTimeMinutesFromMidnight),
       durationMinutes: activity.durationMinutes,
       registrationDeadline: activity.Registration?.deadlineMinutesBeforeStart,
+      countdownMinutes: activity.Countdown?.startCountdownMinutesBefore,
     },
     lastUpdatedAt: activity.updatedAt,
     requestedAction,
@@ -89,6 +95,7 @@ export async function action({ request, params }: ActionArgs) {
       startTimeMinutesFromMidnight: activity.minutesFromMidnight,
       durationMinutes: activity.duration,
       registartionDeadlineMinutes: activity.registrationDeadlineMinutes,
+      countdownMinutes: activity.countdownMinutes,
     });
 
     return redirect(`/admin/event/${params.slug}`);
@@ -146,6 +153,15 @@ export default function EditActivity() {
             defaultValue={defaultData.registrationDeadline ?? undefined}
           />
         )}
+        <CreateUpdateActivityFields.CountdownMinutes
+          error={
+            getErrorForField("countdownMinutes") ??
+            (type === "mystery"
+              ? t("activity.model.countdown.suggestedForMystery")
+              : undefined)
+          }
+          defaultValue={defaultData.countdownMinutes}
+        />
         <Button type="submit" value={requestedAction} name="_action">
           {transition?.state === "submitting"
             ? t(`admin.event.activities.${requestedAction}.submitting`)

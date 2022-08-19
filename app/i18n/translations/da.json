@@ -31,6 +31,10 @@
   "activity.model.registration.deadline": "Tilmeldingsfrist",
   "activity.model.registration.deadline.unit": "Minutter",
   "activity.model.registration.deadline.helpText": "Til de større turneringer kan tilmeldingen lukke lidt tid før selve turneringen starter.",
+  "activity.model.countdown": "Nedtælling",
+  "activity.model.countdown.unit": "Minutter",
+  "activity.model.countdown.helpText": "Lav en countdown til denne aktivitet. Hvis der er en tilmeldingsfrist så vil countdown tælle ned til tilmeldingsfristen.",
+  "activity.model.countdown.suggestedForMystery": "Det anbefales at lave countdown til mystery",
 
   "asset.model.name": "Navn",
   "asset.model.type": "Type",

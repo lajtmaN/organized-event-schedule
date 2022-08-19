@@ -129,9 +129,32 @@ export const CreateUpdateActivityFields = {
           <Trans i18nKey="activity.model.registration.deadline.helpText" />
         }
         addon={<Trans i18nKey="activity.model.registration.deadline.unit" />}
+        min={0}
       />
       <FormErrorMessage>{error}</FormErrorMessage>
     </Label>
+  ),
+  CountdownMinutes: ({
+    error,
+    defaultValue,
+    ...rest
+  }: TextFieldProps<number>) => (
+    <>
+      <Label>
+        <Trans i18nKey="activity.model.countdown" />
+        <TextInput
+          {...rest}
+          type="number"
+          name="countdownMinutes"
+          defaultValue={defaultValue}
+          helperText={<Trans i18nKey="activity.model.countdown.helpText" />}
+          addon={<Trans i18nKey="activity.model.countdown.unit" />}
+          max={60}
+          min={0}
+        />
+        <FormErrorMessage>{error}</FormErrorMessage>
+      </Label>
+    </>
   ),
 };
 
@@ -146,6 +169,10 @@ export const extractActivityFromFormData = (formData: FormData) => {
   const registrationDeadlineRaw = formData.get("registrationDeadline");
   const registrationDeadlineMinutes = registrationDeadlineRaw
     ? parseInt(registrationDeadlineRaw.toString())
+    : null;
+  const countdownMinutesRaw = formData.get("countdownMinutes");
+  const countdownMinutes = countdownMinutesRaw
+    ? parseInt(countdownMinutesRaw.toString())
     : null;
 
   const errors: Array<{ field: string; error: string }> = [];
@@ -165,6 +192,7 @@ export const extractActivityFromFormData = (formData: FormData) => {
       minutesFromMidnight: minutesFromMidnight!,
       duration,
       registrationDeadlineMinutes,
+      countdownMinutes,
     },
   };
 };
