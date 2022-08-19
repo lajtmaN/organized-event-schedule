@@ -170,7 +170,11 @@ export default function Event() {
         <li>
           <MinimalisticLink to={`/schedule/${slug}`}>Tidsplan</MinimalisticLink>
         </li>
-        <li>Link til dashboard</li>
+        <li>
+          <MinimalisticLink to={`/dashboard/${slug}`}>
+            Dashboard
+          </MinimalisticLink>
+        </li>
       </ul>
     </div>
   );
